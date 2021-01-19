@@ -151,5 +151,8 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,intellij
 /.idea/
+<<<<<<< HEAD
 /src/inception5h/
 /src/inception5h/
+=======
+>>>>>>> 826768009ee822c26b32f0fa4f547a2bee8088d8
