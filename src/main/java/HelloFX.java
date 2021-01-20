@@ -20,6 +20,16 @@ public class HelloFX extends Application {
 
     @Override
     public void start(Stage stage) {
+        FlowPane flowpane = createPaneStory3(stage);
+
+
+
+        Scene scene = new Scene(flowpane, 640, 480);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private FlowPane createPaneStory3(Stage stage) {
         SliderAndLabel percent = new SliderAndLabel(0.0, 100.0, percentValue, "Pourcentage");
         TextfieldAndLabel desc = new TextfieldAndLabel("Votre description :");
 
@@ -57,11 +67,7 @@ public class HelloFX extends Application {
         flowpane.getChildren().add(directoryToTest);
         flowpane.getChildren().add(directoryToSave);
         flowpane.getChildren().add(run);
-
-
-        Scene scene = new Scene(flowpane, 640, 480);
-        stage.setScene(scene);
-        stage.show();
+        return flowpane;
     }
 
 
