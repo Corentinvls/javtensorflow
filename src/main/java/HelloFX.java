@@ -2,15 +2,12 @@
 
 import componentsFX.ComponentsFX;
 import javafx.application.Application;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 
@@ -21,7 +18,7 @@ public class HelloFX extends Application {
     public void start(Stage stage) {
 
         GridPane percent = ComponentsFX.sliderAndLabel(0.0, 100.0, percentValue, "Pourcentage");
-        GridPane desc = ComponentsFX.textfieldAndLabel("Votre description :","beagle");
+        GridPane desc = ComponentsFX.textfieldAndLabel("Votre description :");
         Button submit = new Button("valider");
         submit.setOnAction(event -> {
             percentValue = ((Slider) percent.getChildren().get(1)).getValue();
