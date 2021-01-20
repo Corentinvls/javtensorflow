@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 
@@ -27,48 +28,18 @@ public class HelloFX extends Application {
 
     @Override
     public void start(Stage stage) {
-        FlowPane flowpane = createPaneStory3(stage);
+        ArrayList<Object> classifyResult = ClassifyImage.displayClassify("src/inception5h/", "src/inception5h/tensorPics/jack.jpg");
+        ImageViewer viewer = new ImageViewer("src/inception5h/tensorPics/jack.jpg", String.format("BEST MATCH: %s (%.2f%% )%n",
+                classifyResult.get(0),
+                classifyResult.get(1)));
 
-        ImageViewer viewer = new ImageViewer("src/inception5h/tensorPics/jack.jpg","salut");
         GridPane.setFillWidth(viewer, true);
         viewer.setMaxWidth(Double.MAX_VALUE);
 
         SliderAndLabel percent = new SliderAndLabel(0.0, 100.0, percentValue, "Pourcentage");
-
         TextfieldAndLabel desc = new TextfieldAndLabel("Votre description :");
 
-        Button submit = new Button("Valider");
-        submit.setOnAction(event -> {
-            percentValue = percent.getValue();
-            descValue = desc.getText();
-            System.out.println(percentValue);
-            System.out.println(descValue);
-        });
-
-        GridPane gridPane = new GridPane();
-        gridPane.add(viewer, 0,0,3,1);
-        gridPane.add(percent,0,1,1,1);
-        gridPane.add(desc,1,1,1,1);
-        gridPane.add(submit,2,1,1,1);
-        gridPane.setHgap(10);
-
-        ColumnConstraints col3 = new ColumnConstraints();
-        col3.setPercentWidth(100);
-        gridPane.getColumnConstraints().addAll(col3,col3,col3);
-
-        viewer.setAlignment(Pos.CENTER);
-        percent.setAlignment(Pos.CENTER);
-        desc.setAlignment(Pos.CENTER);
-        submit.setAlignment(Pos.CENTER);
-gridPane.add(flowpane,0,3);
-        Scene scene = new Scene(gridPane, 640, 480);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    private FlowPane createPaneStory3(Stage stage) {
-        SliderAndLabel percent = new SliderAndLabel(0.0, 100.0, percentValue, "Pourcentage");
-        TextfieldAndLabel desc = new TextfieldAndLabel("Votre description :");
+        /* Buttons */
 
         ButtonSelectDirectoryPath directoryToTest = new ButtonSelectDirectoryPath("Which ?", stage);
         ButtonSelectDirectoryPath directoryToSave = new ButtonSelectDirectoryPath("Where ?", stage);
@@ -96,15 +67,37 @@ gridPane.add(flowpane,0,3);
             }
         });
 
+        Button submit = new Button("Valider");
+        submit.setOnAction(event -> {
+            percentValue = percent.getValue();
+            descValue = desc.getText();
+            System.out.println(percentValue);
+            System.out.println(descValue);
+        });
 
-        FlowPane flowpane = new FlowPane();
-        flowpane.getChildren().add(percent);
-        flowpane.getChildren().add(desc);
+        HBox buttonBox = new HBox(directoryToTest, directoryToSave, submit);
+        buttonBox.setSpacing(10);
+        buttonBox.setAlignment(Pos.BOTTOM_CENTER);
 
-        flowpane.getChildren().add(directoryToTest);
-        flowpane.getChildren().add(directoryToSave);
-        flowpane.getChildren().add(run);
-        return flowpane;
+        GridPane gridPane = new GridPane();
+        gridPane.add(viewer, 0, 0, 3, 1);
+        gridPane.add(percent, 0, 1, 1, 1);
+        gridPane.add(desc, 1, 1, 1, 1);
+        gridPane.add(buttonBox, 2, 1, 1, 1);
+        gridPane.setHgap(10);
+
+        ColumnConstraints col3 = new ColumnConstraints();
+        col3.setPercentWidth(100);
+        gridPane.getColumnConstraints().addAll(col3, col3, col3);
+
+        viewer.setAlignment(Pos.CENTER);
+        percent.setAlignment(Pos.CENTER);
+        desc.setAlignment(Pos.CENTER);
+        submit.setAlignment(Pos.CENTER);
+
+        Scene scene = new Scene(gridPane, 640, 480);
+        stage.setScene(scene);
+        stage.show();
     }
 
 
