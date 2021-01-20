@@ -4,17 +4,16 @@ import org.tensorflow.Graph;
 import org.tensorflow.Session;
 import org.tensorflow.Tensor;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-public class Main {
-
+public class ClassifyImage {
+    /**
+     * Function to display the result of an image classifaction in the terminal
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
 
         Utils utils =new Utils();
@@ -32,14 +31,21 @@ public class Main {
         byte[] imageBytes = utils.readAllBytesOrExit(Paths.get(imageFile));
 
         try (Tensor image = tfutils.byteBufferToTensor(imageBytes)) {
-            float[] labelProbabilities = executeInceptionGraph(graphDef, image);
-            int bestLabelIdx = maxIndex(labelProbabilities);
+            float[] labelProbabilities = executeClassify(graphDef, image);
+            int bestLabelIdx = utils.bestMatch(labelProbabilities);
             System.out.printf("BEST MATCH: %s (%.2f%% likely)%n",
                     labels.get(bestLabelIdx),
                     labelProbabilities[bestLabelIdx] * 100f);
         }
     }
-    private static float[] executeInceptionGraph(byte[] graphDef, Tensor<Float> image) {
+
+    /**
+     * Function to run the Image Classification
+     * @param graphDef
+     * @param image
+     * @return
+     */
+    private static float[] executeClassify(byte[] graphDef, Tensor<Float> image) {
         try (Graph g = new Graph()) {
             g.importGraphDef(graphDef);
             try (Session s = new Session(g);
@@ -57,13 +63,5 @@ public class Main {
             }
         }
     }
-    private static int maxIndex(float[] probabilities) {
-        int best = 0;
-        for (int i = 1; i < probabilities.length; ++i) {
-            if (probabilities[i] > probabilities[best]) {
-                best = i;
-            }
-        }
-        return best;
-    }
+
 }

@@ -24,4 +24,13 @@ public class Utils {
         }
         return null;
     }
+      int bestMatch(float[] probabilities) {
+        int best = 0;
+        for (int i = 1; i < probabilities.length; ++i) {
+            if (probabilities[i] > probabilities[best]) {
+                best = i;
+            }
+        }
+        return best;
+    }
 }
