@@ -1,5 +1,6 @@
 
 
+import componentsFX.ImageViewer;
 import componentsFX.SliderAndLabel;
 import componentsFX.TextfieldAndLabel;
 import javafx.application.Application;
@@ -17,9 +18,9 @@ public class HelloFX extends Application {
     @Override
     public void start(Stage stage) {
 
+        ImageViewer viewer = new ImageViewer("src/inception5h/tensorPics/jack.jpg","salut");
         SliderAndLabel percent = new SliderAndLabel(0.0, 100.0, percentValue, "Pourcentage");
         TextfieldAndLabel desc = new TextfieldAndLabel("Votre description :");
-        //GridPane desc = ComponentsFX.textfieldAndLabel("Votre description :");
         Button submit = new Button("valider");
         submit.setOnAction(event -> {
             percentValue = percent.getValue();
@@ -28,12 +29,13 @@ public class HelloFX extends Application {
             System.out.println(descValue);
         });
 
-        FlowPane flowpane = new FlowPane();
-        flowpane.getChildren().add(percent);
-        flowpane.getChildren().add(desc);
-        flowpane.getChildren().add(submit);
+        GridPane gridPane = new GridPane();
+        gridPane.add(viewer, 0,0,3,1);
+        gridPane.add(percent,0,1,1,1);
+        gridPane.add(desc,1,1,1,1);
+        gridPane.add(submit,2,1,1,1);
 
-        Scene scene = new Scene(flowpane, 640, 480);
+        Scene scene = new Scene(gridPane, 640, 480);
         stage.setScene(scene);
         stage.show();
     }
