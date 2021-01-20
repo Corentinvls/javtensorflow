@@ -45,7 +45,18 @@ public class ClassifyImage {
             return executeClassify(graphDef, image);
         }
     }
+    public static void getClassifyFromByteImage(String modelDir, byte[] imageBytes) {
+        List<String> labels = utils.readAllLinesOrExit(Paths.get(modelDir, "labels.txt"));
 
+        byte[] graphDef = utils.readAllBytesOrExit(Paths.get(modelDir, "tensorflow_inception_graph.pb"));;
+        try (Tensor image = tfutils.byteBufferToTensor(imageBytes)) {
+            float[] labelProbabilities = executeClassify(graphDef, image);
+            int bestLabelIdx = utils.bestMatch(labelProbabilities);
+            System.out.printf("BEST MATCH: %s (%.2f%% likely)%n",
+                    labels.get(bestLabelIdx),
+                    labelProbabilities[bestLabelIdx] * 100f);
+        }
+    }
     /**
      * Function to run the Image Classification
      *

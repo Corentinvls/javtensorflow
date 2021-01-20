@@ -1,3 +1,10 @@
+import org.bytedeco.javacv.Java2DFrameConverter;
+import org.bytedeco.javacv.OpenCVFrameConverter;
+import org.bytedeco.opencv.opencv_core.IplImage;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -32,5 +39,18 @@ public class Utils {
             }
         }
         return best;
+    }
+    static byte[] iplImageToByteArray(IplImage img) throws IOException {
+        BufferedImage im = new Java2DFrameConverter().convert(new OpenCVFrameConverter.ToIplImage().convert(img));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] barr = null;
+        try{
+            ImageIO.write(im,"jpg",baos);
+            baos.flush();
+            barr = baos.toByteArray();
+        }finally{
+            baos.close();
+        }
+        return barr;
     }
 }
