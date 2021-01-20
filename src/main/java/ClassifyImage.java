@@ -4,6 +4,7 @@ import org.tensorflow.Graph;
 import org.tensorflow.Session;
 import org.tensorflow.Tensor;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +29,7 @@ public class ClassifyImage {
         displayClassify(modelDir, imageFile);
     }
 
-    private static void displayClassify(String modelDir, String imageFile) {
+    static void displayClassify(String modelDir, String imageFile) {
         List<String> labels = utils.readAllLinesOrExit(Paths.get(modelDir, "labels.txt"));
         float[] labelProbabilities = getClassify(modelDir, imageFile);
         System.out.println(Arrays.toString(labelProbabilities));
@@ -36,6 +37,14 @@ public class ClassifyImage {
         System.out.printf("BEST MATCH: %s (%.2f%% likely)%n",
                 labels.get(bestLabelIdx),
                 labelProbabilities[bestLabelIdx] * 100f);
+    }
+
+    static void ArrayClassify(String modelDir, String imageDir, String saveDir) {
+        File[] imageList = utils.GetImageFromDir(imageDir);
+        System.out.println(Arrays.toString(imageList));
+        for (File image : imageList) {
+            displayClassify(modelDir, image.getAbsolutePath());
+        }
     }
 
     private static float[] getClassify(String modelDir, String imageFile) {
