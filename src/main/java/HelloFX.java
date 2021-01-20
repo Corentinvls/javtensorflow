@@ -7,7 +7,6 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -15,17 +14,7 @@ import javafx.stage.Stage;
 
 
 import componentsFX.ImageViewer;
-import componentsFX.SliderAndLabel;
-import componentsFX.TextfieldAndLabel;
-import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,7 +61,7 @@ public class HelloFX extends Application {
         desc.setAlignment(Pos.CENTER);
         submit.setAlignment(Pos.CENTER);
 gridPane.add(flowpane,0,3);
-        Scene scene = new Scene(flowpane, 640, 480);
+        Scene scene = new Scene(gridPane, 640, 480);
         stage.setScene(scene);
         stage.show();
     }
