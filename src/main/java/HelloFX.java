@@ -4,9 +4,11 @@ import componentsFX.ImageViewer;
 import componentsFX.SliderAndLabel;
 import componentsFX.TextfieldAndLabel;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -19,9 +21,14 @@ public class HelloFX extends Application {
     public void start(Stage stage) {
 
         ImageViewer viewer = new ImageViewer("src/inception5h/tensorPics/jack.jpg","salut");
+        GridPane.setFillWidth(viewer, true);
+        viewer.setMaxWidth(Double.MAX_VALUE);
+
         SliderAndLabel percent = new SliderAndLabel(0.0, 100.0, percentValue, "Pourcentage");
+
         TextfieldAndLabel desc = new TextfieldAndLabel("Votre description :");
-        Button submit = new Button("valider");
+
+        Button submit = new Button("Valider");
         submit.setOnAction(event -> {
             percentValue = percent.getValue();
             descValue = desc.getText();
@@ -34,14 +41,21 @@ public class HelloFX extends Application {
         gridPane.add(percent,0,1,1,1);
         gridPane.add(desc,1,1,1,1);
         gridPane.add(submit,2,1,1,1);
+        gridPane.setHgap(10);
+
+        ColumnConstraints col3 = new ColumnConstraints();
+        col3.setPercentWidth(100);
+        gridPane.getColumnConstraints().addAll(col3,col3,col3);
+
+        viewer.setAlignment(Pos.CENTER);
+        percent.setAlignment(Pos.CENTER);
+        desc.setAlignment(Pos.CENTER);
+        submit.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(gridPane, 640, 480);
         stage.setScene(scene);
         stage.show();
     }
-
-
-
 
     public static void main(String[] args) {
         launch();
