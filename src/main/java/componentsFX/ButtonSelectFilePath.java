@@ -23,7 +23,6 @@ public class ButtonSelectFilePath extends Button {
         this.setOnAction(e -> {
             File selectedDirectory = fileChooser.showOpenDialog(stage);
             this.path = selectedDirectory.getAbsolutePath();
-            System.out.println(selectedDirectory.getAbsolutePath());
         });
 
     }

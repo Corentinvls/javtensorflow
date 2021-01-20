@@ -1,7 +1,6 @@
 
 
 import componentsFX.ButtonSelectDirectoryPath;
-import componentsFX.ButtonSelectFilePath;
 import componentsFX.SliderAndLabel;
 import componentsFX.TextfieldAndLabel;
 import javafx.application.Application;
@@ -9,6 +8,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HelloFX extends Application {
@@ -22,13 +25,28 @@ public class HelloFX extends Application {
 
         ButtonSelectDirectoryPath directoryToTest = new ButtonSelectDirectoryPath("Which ?", stage);
         ButtonSelectDirectoryPath directoryToSave = new ButtonSelectDirectoryPath("Where ?", stage);
-
         Button run = new Button("run");
         run.setOnAction(event ->
         {
             percentValue = percent.getValue();
             descValue = desc.getText();
-            ClassifyImage.ArrayClassify("/Users/vallois/Documents/COURS/javatensorflow/src/inception5h/", directoryToTest.getPath(), directoryToSave.getPath());
+            List<ArrayList<Object>> results = ClassifyImage.ArrayClassify("src/inception5h/", directoryToTest.getPath());
+
+            for (ArrayList result : results) {
+                String[] labelFound = result.get(0).toString().split(" ");
+                if (((Float) result.get(1)) >= percentValue) {
+                    for (String labelWord : labelFound) {
+                        if (descValue.contains(labelWord)) {
+                            try {
+                                Utils.copyFile(result.get(2).toString(), labelWord, directoryToSave.getPath());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
         });
 
 

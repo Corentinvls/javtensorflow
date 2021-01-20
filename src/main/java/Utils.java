@@ -1,6 +1,6 @@
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,4 +55,30 @@ public class Utils {
         };
         return dir.listFiles(IMAGE_FILTER);
     }
+
+    static void copyFile(String source, String name, String dest) throws IOException {
+        File copy = null;
+        int i = source.lastIndexOf('.');
+        String extension = null;
+        if (i > 0) {
+            extension = source.substring(i + 1);
+        }
+        copy = new File(dest + "/" + name + "." + extension);
+
+        BufferedImage image = null;
+        File f = null;
+
+        try {
+            f = new File(source);
+            image = ImageIO.read(f);
+        } catch (IOException e) {
+            System.out.println("Error: " + e);
+        }
+        try {
+            ImageIO.write(image, extension, copy);
+        } catch (IOException e) {
+            System.out.println("Error: " + e);
+        }
+    }
+
 }

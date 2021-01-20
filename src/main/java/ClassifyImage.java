@@ -6,8 +6,7 @@ import org.tensorflow.Tensor;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class ClassifyImage {
     private static Utils utils = new Utils();
@@ -15,7 +14,6 @@ public class ClassifyImage {
 
     /**
      * Function to display the result of an image classifaction in the terminal
-     *
      * @param args
      * @throws Exception
      */
@@ -29,22 +27,30 @@ public class ClassifyImage {
         displayClassify(modelDir, imageFile);
     }
 
-    static void displayClassify(String modelDir, String imageFile) {
+    static ArrayList<Object> displayClassify(String modelDir, String imageFile) {
         List<String> labels = utils.readAllLinesOrExit(Paths.get(modelDir, "labels.txt"));
         float[] labelProbabilities = getClassify(modelDir, imageFile);
-        System.out.println(Arrays.toString(labelProbabilities));
+
         int bestLabelIdx = utils.bestMatch(labelProbabilities);
+        String find = labels.get(bestLabelIdx);
+        float percent = labelProbabilities[bestLabelIdx] * 100f;
         System.out.printf("BEST MATCH: %s (%.2f%% likely)%n",
-                labels.get(bestLabelIdx),
-                labelProbabilities[bestLabelIdx] * 100f);
+                find,
+                percent);
+        ArrayList<Object> result = new ArrayList<>();
+        result.add(find);
+        result.add(percent);
+        result.add(imageFile);
+        return result;
     }
 
-    static void ArrayClassify(String modelDir, String imageDir, String saveDir) {
+    static  List<ArrayList<Object>> ArrayClassify(String modelDir, String imageDir) {
         File[] imageList = utils.GetImageFromDir(imageDir);
-        System.out.println(Arrays.toString(imageList));
+        ArrayList<ArrayList<Object>>result= new ArrayList<>();
         for (File image : imageList) {
-            displayClassify(modelDir, image.getAbsolutePath());
+            result.add(displayClassify(modelDir, image.getAbsolutePath()));
         }
+        return result;
     }
 
     private static float[] getClassify(String modelDir, String imageFile) {

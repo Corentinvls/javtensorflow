@@ -20,7 +20,6 @@ public class ButtonSelectDirectoryPath extends Button {
         this.setOnAction(e -> {
             File selectedDirectory = directoryChooser.showDialog(stage);
             this.path = selectedDirectory.getAbsolutePath();
-            System.out.println(selectedDirectory.getAbsolutePath());
         });
 
     }
