@@ -58,6 +58,7 @@ public class SmartCam extends Application {
         ButtonSelectFilePath fileToOpen = new ButtonSelectFilePath("Open img.", stage);
         ButtonSelectDirectoryPath directoryToTest = new ButtonSelectDirectoryPath("Image dir.", stage);
         ButtonSelectDirectoryPath directoryToSave = new ButtonSelectDirectoryPath("Save dir.", stage);
+        ChoiceBoxFilter choiceBoxFilter = new ChoiceBoxFilter();
         Button runFilter = new Button("Run");
         runFilter.setOnAction(event ->
         {
@@ -69,12 +70,20 @@ public class SmartCam extends Application {
                 String[] labelFound = result.get(0).toString().split(" ");
                 if (((Float) result.get(1)) >= percentValue) {
                     for (String labelWord : labelFound) {
-                        if (descValue.contains(labelWord)|| descValue.equals("")) {
+                        if (descValue.contains(labelWord) || descValue.equals("")) {
                             try {
                                 Utils.copyFile(result.get(2).toString(), labelWord, directoryToSave.getPath());
-
-                            } catch (Exception e) {
+                            } catch (IOException e) {
                                 e.printStackTrace();
+                            }
+                            String filter = (String) choiceBoxFilter.getValue();
+                            if (filter != null && !filter.equals("aucun")) {
+                                try {
+                                    Filter.filter(directoryToSave.getPath() + "/" + labelWord + "." + Utils.getExtension(result.get(2).toString()), labelWord, directoryToSave.getPath(), filter);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
                             }
                             break;
                         }
@@ -96,7 +105,7 @@ public class SmartCam extends Application {
         });
 
         // box for filter buttons
-        HBox buttonFilterBox = new HBox(directoryToTest, directoryToSave, runFilter);
+        HBox buttonFilterBox = new HBox(directoryToTest, directoryToSave, choiceBoxFilter, runFilter);
         buttonFilterBox.setSpacing(0);
         buttonFilterBox.setAlignment(Pos.BOTTOM_CENTER);
 

@@ -1,4 +1,5 @@
 package componentsFX;
+
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
@@ -27,11 +28,12 @@ import java.util.concurrent.Executors;
 import static org.bytedeco.opencv.helper.opencv_imgcodecs.cvSaveImage;
 
 
-public class ClassifyWebcam extends VBox{
+public class ClassifyWebcam extends VBox {
 
     Java2DFrameConverter java2DFrameConverter = new Java2DFrameConverter();
-    ChoiceBoxFilter choiceBoxFilter=new ChoiceBoxFilter();
-    public  ClassifyWebcam() throws FrameGrabber.Exception {
+    ChoiceBoxFilter choiceBoxFilter = new ChoiceBoxFilter();
+
+    public ClassifyWebcam() throws FrameGrabber.Exception {
         OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(0);
         OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
         grabber.start();
@@ -46,13 +48,13 @@ public class ClassifyWebcam extends VBox{
             byte[] barr = null;
             IplImage img = null;
             Timer time = new Timer(); // Instantiate Timer Object
-            ScheduledClassify scheduledTask = new ScheduledClassify(barr, img,choiceBoxFilter);
+            ScheduledClassify scheduledTask = new ScheduledClassify(barr, img, choiceBoxFilter);
             time.schedule(scheduledTask, 3000, 3000);
             while (true) {
                 Frame frame = null;
                 try {
                     frame = grabber.grabFrame();
-                    img= converter.convert(frame);
+                    img = converter.convert(frame);
                     barr = Utils.iplImageToByteArray(img);
                     scheduledTask.setParam(barr);
                     scheduledTask.setImg(img);
@@ -86,17 +88,17 @@ public class ClassifyWebcam extends VBox{
 
     public static class ScheduledClassify extends TimerTask {
         private ChoiceBoxFilter choiceBoxFilter;
-        private  IplImage img;
+        private IplImage img;
         byte[] param;
         private float resultPercent;
         private String resultLabel;
 
-        public ScheduledClassify(byte[] param,IplImage img,ChoiceBoxFilter choiceBoxFilter) {
+        public ScheduledClassify(byte[] param, IplImage img, ChoiceBoxFilter choiceBoxFilter) {
             this.param = param;
             this.resultLabel = "";
             this.resultPercent = 0.0f;
-            this.img=img;
-            this.choiceBoxFilter=choiceBoxFilter;
+            this.img = img;
+            this.choiceBoxFilter = choiceBoxFilter;
         }
 
         @Override
@@ -107,16 +109,15 @@ public class ClassifyWebcam extends VBox{
                 Instant instant = date.toInstant();
                 resultLabel = (String) result.get(0);
                 resultPercent = (float) result.get(1);
-                cvSaveImage("src/inception5h/webcam/"+resultLabel+instant+".png",img);
-                String filter= (String) choiceBoxFilter.getValue();
-                if(filter != null&&!filter.equals("aucun")){
-                try {
-
-                    Filter.filter("src/inception5h/webcam/"+resultLabel+instant+".png",instant+resultLabel,"src/inception5h/webcam/",filter);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                cvSaveImage("src/inception5h/webcam/" + resultLabel + instant + ".png", img);
+                String filter = (String) choiceBoxFilter.getValue();
+                if (filter != null && !filter.equals("aucun")) {
+                    try {
+                        Filter.filter("src/inception5h/webcam/" + resultLabel + instant + ".png", instant + resultLabel, "src/inception5h/webcam/", filter);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
             }
         }
 
