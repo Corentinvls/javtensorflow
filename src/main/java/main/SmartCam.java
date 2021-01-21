@@ -47,10 +47,10 @@ public class SmartCam extends Application {
         viewer.setMaxWidth(Double.MAX_VALUE);
 
         // slider for percent
-        SliderAndLabel percent = new SliderAndLabel(0.0, 100.0, percentValue, "Pourcentage");
+        SliderAndLabel percent = new SliderAndLabel(0.0, 100.0, percentValue, "Percentage");
 
         // text input for description
-        TextfieldAndLabel desc = new TextfieldAndLabel("Votre description :");
+        TextfieldAndLabel desc = new TextfieldAndLabel("Your description:");
 
         /* Buttons */
 
