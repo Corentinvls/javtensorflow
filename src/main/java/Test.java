@@ -1,17 +1,10 @@
 import org.bytedeco.javacv.*;
 import org.bytedeco.opencv.opencv_core.IplImage;
-import org.bytedeco.opencv.opencv_core.Mat;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static org.bytedeco.opencv.global.opencv_core.cvFlip;
-import static org.bytedeco.opencv.helper.opencv_imgcodecs.cvSaveImage;
 
 public class Test implements Runnable {
     final int INTERVAL = 10;///you may use interval
@@ -22,23 +15,26 @@ public class Test implements Runnable {
     }
 
     public void run() {
-
+        byte[] barr = null;
+        Timer time = new Timer(); // Instantiate Timer Object
+        ScheduledClassify scheduledTask = new ScheduledClassify(barr);
+        time.schedule(scheduledTask, 3000, 3000);
         FrameGrabber grabber = new OpenCVFrameGrabber(0); // 1 for next camera
         OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
         IplImage img;
-        int i = 0;
+
         try {
             grabber.start();
 
             while (true) {
                 Frame frame = grabber.grab();
                 img = converter.convert(frame);
-                byte[] barr = Utils.iplImageToByteArray(img);
-                if(i%150==0){
-                    System.out.println("go");
-                    ClassifyImage.getClassifyFromByteImage("/Users/vallois/Documents/COURS/javatensorflow/src/inception5h/",barr);
-                }
-               i++;
+                 barr = Utils.iplImageToByteArray(img);
+                scheduledTask.setParam(barr);
+                String resultLabel = scheduledTask.getResultLabel();
+                float resultPercent = scheduledTask.getResultPercent();
+                System.out.println(resultLabel);
+                System.out.println(resultPercent);
                 //the grabbed frame will be flipped, re-flip to make it right
                 cvFlip(img, img, 1);// l-r = 90_degrees_steps_anti_clockwise;
                 canvas.showImage(converter.convert(img));
