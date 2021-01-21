@@ -6,7 +6,9 @@ import org.tensorflow.Tensor;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ClassifyImage {
     private static Utils utils = new Utils();
@@ -14,6 +16,7 @@ public class ClassifyImage {
 
     /**
      * Function to display the result of an image classifaction in the terminal
+     *
      * @param args
      * @throws Exception
      */
@@ -60,7 +63,23 @@ public class ClassifyImage {
             return executeClassify(graphDef, image);
         }
     }
+    public static ArrayList<Object> getClassifyFromByteImage(String modelDir, byte[] imageBytes) {
+        List<String> labels = utils.readAllLinesOrExit(Paths.get(modelDir, "labels.txt"));
 
+        byte[] graphDef = utils.readAllBytesOrExit(Paths.get(modelDir, "tensorflow_inception_graph.pb"));;
+        try (Tensor image = tfutils.byteBufferToTensor(imageBytes)) {
+            float[] labelProbabilities = executeClassify(graphDef, image);
+            int bestLabelIdx = utils.bestMatch(labelProbabilities);
+            System.out.printf("BEST MATCH: %s (%.2f%% likely)%n",
+                    labels.get(bestLabelIdx),
+                    labelProbabilities[bestLabelIdx] * 100f);
+            ArrayList<Object> result = new ArrayList<>();
+            result.add(labels.get(bestLabelIdx));
+            result.add(labelProbabilities[bestLabelIdx] * 100f);
+            return result;
+        }
+
+    }
     /**
      * Function to run the Image Classification
      *
