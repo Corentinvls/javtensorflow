@@ -54,10 +54,11 @@ public class SmartCam extends Application {
 
         /* Buttons */
 
+        ButtonSelectFilePath fileToOpen = new ButtonSelectFilePath("Open img.", stage);
         ButtonSelectDirectoryPath directoryToTest = new ButtonSelectDirectoryPath("Image dir.", stage);
         ButtonSelectDirectoryPath directoryToSave = new ButtonSelectDirectoryPath("Save dir.", stage);
-        Button run = new Button("Run");
-        run.setOnAction(event ->
+        Button runFilter = new Button("Run");
+        runFilter.setOnAction(event ->
         {
             percentValue = percent.getValue();
             descValue = desc.getText();
@@ -80,36 +81,60 @@ public class SmartCam extends Application {
             }
         });
 
-        // box for buttons
-        HBox buttonBox = new HBox(directoryToTest, directoryToSave, run);
-        buttonBox.setSpacing(10);
-        buttonBox.setAlignment(Pos.BOTTOM_CENTER);
+        Button updateImage = new Button("Update Image");
+        updateImage.setOnAction(event ->
+        {
+            // Results of image classification
+            ArrayList<Object> tempResult = ClassifyImage.displayClassify("src/inception5h/", fileToOpen.getPath());
+
+            viewer.setImageView(fileToOpen.getPath());
+            viewer.setLabel(String.format("BEST MATCH: %s (%.2f%%)%n",
+                    tempResult.get(0),
+                    tempResult.get(1)));
+        });
+
+        // box for filter buttons
+        HBox buttonFilterBox = new HBox(directoryToTest, directoryToSave, runFilter);
+        buttonFilterBox.setSpacing(0);
+        buttonFilterBox.setAlignment(Pos.BOTTOM_CENTER);
+
+        // box for open buttons
+        HBox buttonFileBox = new HBox(fileToOpen, updateImage);
+        buttonFileBox.setSpacing(0);
+        buttonFileBox.setAlignment(Pos.BOTTOM_CENTER);
 
         /* Image Pane */
         GridPane gridImage = new GridPane();
-        gridImage.add(viewer, 0, 0, 3, 1);
-        gridImage.add(percent, 0, 1, 1, 1);
-        gridImage.add(desc, 1, 1, 1, 1);
-        gridImage.add(buttonBox, 2, 1, 1, 1);
-        gridImage.setHgap(10);
+        gridImage.add(buttonFileBox, 0, 0, 3, 1);
+        gridImage.add(viewer, 0, 1, 3, 1);
+        gridImage.add(percent, 0, 2, 1, 1);
+        gridImage.add(desc, 1, 2, 1, 1);
+        gridImage.add(buttonFilterBox, 2, 2, 1, 1);
         tabImage.setContent(gridImage);
 
         viewer.setAlignment(Pos.CENTER);
         percent.setAlignment(Pos.CENTER);
         desc.setAlignment(Pos.CENTER);
-        run.setAlignment(Pos.CENTER);
+        updateImage.setAlignment(Pos.CENTER);
+
 
         ColumnConstraints col3 = new ColumnConstraints();
         col3.setPercentWidth(100);
         gridImage.getColumnConstraints().addAll(col3, col3, col3);
 
+
         /* Camera Pane */
         GridPane gridCamera = new GridPane();
-        gridCamera.add(new ClassifyWebcam(), 1, 3, 3, 1);
+        ClassifyWebcam webcamFeed = new ClassifyWebcam();
+        gridCamera.add(webcamFeed, 0, 0, 1, 1);
+
+        webcamFeed.setAlignment(Pos.CENTER);
+        gridCamera.getColumnConstraints().addAll(col3);
+
         tabCamera.setContent(gridCamera);
 
         /* Scene declaration for window */
-        Scene scene = new Scene(tabPane, 700, 520);
+        Scene scene = new Scene(tabPane, 720, 550);
         stage.setScene(scene);
         stage.show();
     }

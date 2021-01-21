@@ -14,8 +14,26 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class ImageViewer extends VBox {
-    private final Label label;
-    private final ImageView imageView;
+    private Label label;
+    private ImageView imageView;
+
+    public void setLabel(String label) {
+        this.label.setText(label);
+
+    }
+
+    public void setImageView(String imagePath) {
+        FileInputStream input = null;
+        try {
+            input = new FileInputStream(imagePath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Image image = new Image(input);
+
+        this.imageView.setImage(image);
+
+    }
 
     public ImageViewer(String imagePath, String labelString) {
 
