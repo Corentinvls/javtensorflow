@@ -126,7 +126,6 @@ public class SmartCam extends Application {
         desc.setAlignment(Pos.CENTER);
         updateImage.setAlignment(Pos.CENTER);
 
-
         ColumnConstraints col3 = new ColumnConstraints();
         col3.setPercentWidth(100);
         gridImage.getColumnConstraints().addAll(col3, col3, col3);

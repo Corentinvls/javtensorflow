@@ -19,6 +19,7 @@ public class ButtonSelectFilePath extends Button {
                 new FileChooser.ExtensionFilter("All Files", "*.*"),
                 new FileChooser.ExtensionFilter("JPG", "*.jpg"),
                 new FileChooser.ExtensionFilter("PNG", "*.png"));
+
         this.setText(label);
         this.setOnAction(e -> {
             File selectedDirectory = fileChooser.showOpenDialog(stage);

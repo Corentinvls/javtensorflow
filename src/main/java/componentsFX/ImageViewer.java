@@ -17,11 +17,18 @@ public class ImageViewer extends VBox {
     private Label label;
     private ImageView imageView;
 
+    /**
+     * Sets the string for a given ImageViewer object
+     * @param label
+     */
     public void setLabel(String label) {
         this.label.setText(label);
-
     }
 
+    /**
+     * Sets the image for a given ImageViewer object
+     * @param imagePath
+     */
     public void setImageView(String imagePath) {
         FileInputStream input = null;
         try {
@@ -35,6 +42,11 @@ public class ImageViewer extends VBox {
 
     }
 
+    /**
+     * Object to display an image with a string at the bottom, in bold
+     * @param imagePath
+     * @param labelString
+     */
     public ImageViewer(String imagePath, String labelString) {
 
         FileInputStream input = null;

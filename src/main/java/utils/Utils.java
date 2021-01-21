@@ -118,8 +118,6 @@ public class Utils {
         BufferedImage image = null;
         int width = original.width(), height = original.height(), channels = original.arrayChannels();
         byte[] sourcePixels = new byte[width * height * channels];
-        //original.get(0, 0, sourcePixels);
-
 
         if (original.arrayChannels() > 1) {
             image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
@@ -131,7 +129,8 @@ public class Utils {
 
         return image;
     }
-    public static String getExtension(String path){
+
+    public static String getExtension(String path) {
         int i = path.lastIndexOf('.');
 
         if (i > 0) {

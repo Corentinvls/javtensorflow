@@ -52,17 +52,17 @@ public class Filter {
                 int g = (p >> 8) & 0xff;
                 int r = (p >> 16) & 0xff;
                 int b = p & 0xff;
-                if (filter.equals("vert"))
+                if (filter.equals("Green"))
                     p = (a << 24) | (0 << 16) | (g << 8) | 0;
-                if (filter.equals("rouge"))
+                if (filter.equals("Red"))
                     p = (a << 24) | (r << 16) | (0 << 8) | 0;
-                if (filter.equals("bleu"))
+                if (filter.equals("Blue"))
                     p = (a << 24) | (0 << 16) | (0 << 8) | b;
-                if (filter.equals("noir et blanc")) {
+                if (filter.equals("Black and White")) {
                     int avg = (r + g + b) / 3;
                     p = (a << 24) | (avg << 16) | (avg << 8) | avg;
                 }
-                if (filter.equals("sepia")) {
+                if (filter.equals("Sepia")) {
                     int tr = (int) (0.393 * r + 0.769 * g + 0.189 * b);
                     int tg = (int) (0.349 * r + 0.686 * g + 0.168 * b);
                     int tb = (int) (0.272 * r + 0.534 * g + 0.131 * b);

@@ -30,6 +30,13 @@ public class ClassifyImage {
         displayClassify(modelDir, imageFile);
     }
 
+    /**
+     * Function to return an array containing the image classification, percentage, and image file
+     *
+     * @param modelDir
+     * @param imageFile
+     * @return
+     */
     static ArrayList<Object> displayClassify(String modelDir, String imageFile) {
         List<String> labels = utils.readAllLinesOrExit(Paths.get(modelDir, "labels.txt"));
         float[] labelProbabilities = getClassify(modelDir, imageFile);
@@ -47,6 +54,12 @@ public class ClassifyImage {
         return result;
     }
 
+    /**
+     * Returns an array of classifications for a directory of images
+     * @param modelDir
+     * @param imageDir
+     * @return
+     */
     static List<ArrayList<Object>> ArrayClassify(String modelDir, String imageDir) {
         File[] imageList = utils.GetImageFromDir(imageDir);
         ArrayList<ArrayList<Object>> result = new ArrayList<>();
@@ -56,6 +69,12 @@ public class ClassifyImage {
         return result;
     }
 
+    /**
+     * Uses a Tensor to get the classification for an Image path
+     * @param modelDir
+     * @param imageFile
+     * @return
+     */
     private static float[] getClassify(String modelDir, String imageFile) {
         byte[] graphDef = utils.readAllBytesOrExit(Paths.get(modelDir, "tensorflow_inception_graph.pb"));
         byte[] imageBytes = utils.readAllBytesOrExit(Paths.get(imageFile));
@@ -64,6 +83,12 @@ public class ClassifyImage {
         }
     }
 
+    /**
+     * Uses a Tensor to get the classification for an Imagebytes
+     * @param modelDir
+     * @param imageBytes
+     * @return
+     */
     public static ArrayList<Object> getClassifyFromByteImage(String modelDir, byte[] imageBytes) {
         List<String> labels = utils.readAllLinesOrExit(Paths.get(modelDir, "labels.txt"));
         byte[] graphDef = utils.readAllBytesOrExit(Paths.get(modelDir, "tensorflow_inception_graph.pb"));
