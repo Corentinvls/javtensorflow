@@ -56,7 +56,9 @@ public class SmartCam extends Application {
         ButtonSelectFilePath fileToOpen = new ButtonSelectFilePath("Open img.", stage);
         ButtonSelectDirectoryPath directoryToTest = new ButtonSelectDirectoryPath("Image dir.", stage);
         ButtonSelectDirectoryPath directoryToSave = new ButtonSelectDirectoryPath("Save dir.", stage);
-        ChoiceBoxFilter choiceBoxFilter = new ChoiceBoxFilter();
+        String labels[]={"aucun", "vert", "rouge", "bleu", "noir et blanc","sepia"};
+
+        ChoiceBoxCustom choiceBoxFilter = new ChoiceBoxCustom(labels);
         Button runFilter = new Button("Run");
         runFilter.setOnAction(event ->
         {

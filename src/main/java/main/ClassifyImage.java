@@ -28,6 +28,7 @@ public class ClassifyImage {
         String modelDir = args[0];
         String imageFile = args[1];
         displayClassify(modelDir, imageFile);
+        System.exit(0);
     }
 
     static ArrayList<Object> displayClassify(String modelDir, String imageFile) {

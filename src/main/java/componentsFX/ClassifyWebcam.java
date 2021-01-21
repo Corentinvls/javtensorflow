@@ -6,10 +6,10 @@ import javafx.geometry.Pos;
 
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.VBox;
 
 import main.ClassifyImage;
+import main.Test;
 import org.bytedeco.javacv.*;
 import org.bytedeco.opencv.opencv_core.IplImage;
 import utils.Filter;
@@ -17,8 +17,6 @@ import utils.Utils;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.Buffer;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
@@ -31,7 +29,10 @@ import static org.bytedeco.opencv.helper.opencv_imgcodecs.cvSaveImage;
 public class ClassifyWebcam extends VBox {
 
     Java2DFrameConverter java2DFrameConverter = new Java2DFrameConverter();
-    ChoiceBoxFilter choiceBoxFilter = new ChoiceBoxFilter();
+    private String labels[] = {"aucun", "vert", "rouge", "bleu", "noir et blanc", "sepia"};
+    private String labelsFrame[] = {"Doré", "Trait"};
+    ChoiceBoxCustom choiceBoxFilter = new ChoiceBoxCustom(labels);
+    ChoiceBoxCustom choiceBoxFrame = new ChoiceBoxCustom(labelsFrame);
 
     public ClassifyWebcam() throws FrameGrabber.Exception {
         OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(0);
@@ -52,10 +53,19 @@ public class ClassifyWebcam extends VBox {
             time.schedule(scheduledTask, 3000, 3000);
             while (true) {
                 Frame frame = null;
+                BufferedImage imgBuff = null;
                 try {
                     frame = grabber.grabFrame();
                     img = converter.convert(frame);
                     barr = Utils.iplImageToByteArray(img);
+                    System.out.println(choiceBoxFrame.getValue());
+                    if (choiceBoxFrame.getValue() != null) {
+                        imgBuff = Test.applyFrame(Utils.convertIplImageToBuffImage(img), "src/frame/" + choiceBoxFrame.getValue() + ".png", null);
+                        img = Utils.convertBuffToIplImage(imgBuff);
+                    } else {
+                        imgBuff = Utils.convertIplImageToBuffImage(img);
+                    }
+
                     scheduledTask.setParam(barr);
                     scheduledTask.setImg(img);
                     scheduledTask.setChoiceBoxFilter(choiceBoxFilter);
@@ -65,8 +75,7 @@ public class ClassifyWebcam extends VBox {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                imageView.setImage(frameToImage(frame));
+                imageView.setImage(SwingFXUtils.toFXImage(imgBuff, null));
             }
         });
 
@@ -75,25 +84,21 @@ public class ClassifyWebcam extends VBox {
         this.getChildren().add(imageView);
         this.getChildren().add(label);
         this.getChildren().add(choiceBoxFilter);
+        this.getChildren().add(choiceBoxFrame);
         this.setAlignment(Pos.BASELINE_CENTER);
 
 
     }
 
 
-    private WritableImage frameToImage(Frame frame) {
-        BufferedImage bufferedImage = java2DFrameConverter.getBufferedImage(frame);
-        return SwingFXUtils.toFXImage(bufferedImage, null);
-    }
-
     public static class ScheduledClassify extends TimerTask {
-        private ChoiceBoxFilter choiceBoxFilter;
+        private ChoiceBoxCustom choiceBoxFilter;
         private IplImage img;
         byte[] param;
         private float resultPercent;
         private String resultLabel;
 
-        public ScheduledClassify(byte[] param, IplImage img, ChoiceBoxFilter choiceBoxFilter) {
+        public ScheduledClassify(byte[] param, IplImage img, ChoiceBoxCustom choiceBoxFilter) {
             this.param = param;
             this.resultLabel = "";
             this.resultPercent = 0.0f;
@@ -138,7 +143,7 @@ public class ClassifyWebcam extends VBox {
             this.img = img;
         }
 
-        public void setChoiceBoxFilter(ChoiceBoxFilter choiceBoxFilter) {
+        public void setChoiceBoxFilter(ChoiceBoxCustom choiceBoxFilter) {
             this.choiceBoxFilter = choiceBoxFilter;
         }
     }
