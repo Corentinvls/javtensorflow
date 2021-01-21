@@ -1,4 +1,5 @@
 package componentsFX;
+
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
@@ -21,11 +22,11 @@ import java.util.TimerTask;
 import java.util.concurrent.Executors;
 
 
-public class ClassifyWebcam extends VBox{
+public class ClassifyWebcam extends VBox {
     private static Utils utils = new Utils();
     Java2DFrameConverter java2DFrameConverter = new Java2DFrameConverter();
 
-    public  ClassifyWebcam() throws FrameGrabber.Exception {
+    public ClassifyWebcam() throws FrameGrabber.Exception {
         OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(0);
         OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
         grabber.start();
@@ -73,6 +74,7 @@ public class ClassifyWebcam extends VBox{
         BufferedImage bufferedImage = java2DFrameConverter.getBufferedImage(frame);
         return SwingFXUtils.toFXImage(bufferedImage, null);
     }
+
     public class ScheduledClassify extends TimerTask {
         byte[] param;
         private float resultPercent;
@@ -87,7 +89,7 @@ public class ClassifyWebcam extends VBox{
         @Override
         public void run() {
             if (param != null) {
-                ArrayList<Object> result = ClassifyImage.getClassifyFromByteImage("/Users/vallois/Documents/COURS/javatensorflow/src/inception5h/", param);
+                ArrayList<Object> result = ClassifyImage.getClassifyFromByteImage("src/inception5h/", param);
                 resultLabel = (String) result.get(0);
                 resultPercent = (float) result.get(1);
             }

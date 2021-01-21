@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.bytedeco.javacv.FrameGrabber;
 
 
@@ -62,7 +63,6 @@ public class SmartCam extends Application {
                 }
             }
         });
-
 
 
         HBox buttonBox = new HBox(directoryToTest, directoryToSave, run);

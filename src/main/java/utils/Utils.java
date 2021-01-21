@@ -92,33 +92,31 @@ public class Utils {
             System.out.println("Error: " + e);
         }
     }
+
     public static byte[] iplImageToByteArray(IplImage img) throws IOException {
         BufferedImage im = new Java2DFrameConverter().convert(new OpenCVFrameConverter.ToIplImage().convert(img));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] barr = null;
-        try{
-            ImageIO.write(im,"jpg",baos);
+        try {
+            ImageIO.write(im, "jpg", baos);
             baos.flush();
             barr = baos.toByteArray();
-        }finally{
+        } finally {
             baos.close();
         }
         return barr;
     }
-    static Image mat2Image(IplImage frame)
-    {
-        try
-        {
+
+    static Image mat2Image(IplImage frame) {
+        try {
             return SwingFXUtils.toFXImage(matToBufferedImage(frame), null);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.err.println("Cannot convert the Mat obejct: " + e);
             return null;
         }
     }
-    private static BufferedImage matToBufferedImage(IplImage original)
-    {
+
+    private static BufferedImage matToBufferedImage(IplImage original) {
         // init
         BufferedImage image = null;
         int width = original.width(), height = original.height(), channels = original.arrayChannels();
@@ -126,12 +124,9 @@ public class Utils {
         //original.get(0, 0, sourcePixels);
 
 
-        if (original.arrayChannels() > 1)
-        {
+        if (original.arrayChannels() > 1) {
             image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
-        }
-        else
-        {
+        } else {
             image = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
         }
         final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();

@@ -47,9 +47,9 @@ public class ClassifyImage {
         return result;
     }
 
-    static  List<ArrayList<Object>> ArrayClassify(String modelDir, String imageDir) {
+    static List<ArrayList<Object>> ArrayClassify(String modelDir, String imageDir) {
         File[] imageList = utils.GetImageFromDir(imageDir);
-        ArrayList<ArrayList<Object>>result= new ArrayList<>();
+        ArrayList<ArrayList<Object>> result = new ArrayList<>();
         for (File image : imageList) {
             result.add(displayClassify(modelDir, image.getAbsolutePath()));
         }
@@ -63,9 +63,11 @@ public class ClassifyImage {
             return executeClassify(graphDef, image);
         }
     }
+
     public static ArrayList<Object> getClassifyFromByteImage(String modelDir, byte[] imageBytes) {
         List<String> labels = utils.readAllLinesOrExit(Paths.get(modelDir, "labels.txt"));
-        byte[] graphDef = utils.readAllBytesOrExit(Paths.get(modelDir, "tensorflow_inception_graph.pb"));;
+        byte[] graphDef = utils.readAllBytesOrExit(Paths.get(modelDir, "tensorflow_inception_graph.pb"));
+        ;
         try (Tensor image = byteBufferToTensor(imageBytes)) {
             float[] labelProbabilities = executeClassify(graphDef, image);
             int bestLabelIdx = utils.bestMatch(labelProbabilities);
@@ -76,6 +78,7 @@ public class ClassifyImage {
         }
 
     }
+
     /**
      * Function to run the Image Classification
      *
@@ -101,6 +104,7 @@ public class ClassifyImage {
             }
         }
     }
+
     /**
      * create a Tensor from an image
      * <p>
@@ -120,8 +124,8 @@ public class ClassifyImage {
             //   float using (value - Mean)/Scale.
             final float mean = 117f;
             final float scale = 1f;
-            final int H =224;
-            final int W =224;
+            final int H = 224;
+            final int W = 224;
 
             // Since the graph is being constructed once per execution here, we can use a constant for the
             // input image. If the graph were to be re-used for multiple input images, a placeholder would

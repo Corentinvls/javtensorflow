@@ -17,7 +17,7 @@ public class ImageViewer extends VBox {
     private final Label label;
     private final ImageView imageView;
 
-    public ImageViewer(String imagePath,String labelString) {
+    public ImageViewer(String imagePath, String labelString) {
 
         FileInputStream input = null;
         try {
