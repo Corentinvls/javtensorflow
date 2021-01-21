@@ -33,10 +33,8 @@ public class SmartCam extends Application {
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         Tab tabImage = new Tab("Image");
         Tab tabCamera = new Tab("Camera");
-        Tab tabFilters = new Tab("Filters");
         tabPane.getTabs().add(tabImage);
         tabPane.getTabs().add(tabCamera);
-        tabPane.getTabs().add(tabFilters);
 
         // Results of image classification
         ArrayList<Object> classifyResult = ClassifyImage.displayClassify("src/inception5h/", "src/inception5h/tensorPics/jack.jpg");
