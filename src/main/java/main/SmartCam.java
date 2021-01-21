@@ -2,6 +2,7 @@ package main;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import utils.Filter;
 import utils.Utils;
 import componentsFX.*;
 import javafx.application.Application;
@@ -68,10 +69,11 @@ public class SmartCam extends Application {
                 String[] labelFound = result.get(0).toString().split(" ");
                 if (((Float) result.get(1)) >= percentValue) {
                     for (String labelWord : labelFound) {
-                        if (descValue.contains(labelWord)) {
+                        if (descValue.contains(labelWord)|| descValue.equals("")) {
                             try {
                                 Utils.copyFile(result.get(2).toString(), labelWord, directoryToSave.getPath());
-                            } catch (IOException e) {
+
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             break;

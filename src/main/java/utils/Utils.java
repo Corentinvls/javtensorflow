@@ -70,11 +70,8 @@ public class Utils {
 
     public static void copyFile(String source, String name, String dest) throws IOException {
         File copy = null;
-        int i = source.lastIndexOf('.');
-        String extension = null;
-        if (i > 0) {
-            extension = source.substring(i + 1);
-        }
+
+        String extension = getExtension(source);
         copy = new File(dest + "/" + name + "." + extension);
 
         BufferedImage image = null;
@@ -133,5 +130,13 @@ public class Utils {
         System.arraycopy(sourcePixels, 0, targetPixels, 0, sourcePixels.length);
 
         return image;
+    }
+    public static String getExtension(String path){
+        int i = path.lastIndexOf('.');
+
+        if (i > 0) {
+            return path.substring(i + 1);
+        }
+        return null;
     }
 }
