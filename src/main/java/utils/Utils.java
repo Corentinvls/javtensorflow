@@ -1,3 +1,5 @@
+package utils;
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import org.bytedeco.javacv.Java2DFrameConverter;
@@ -17,7 +19,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class Utils {
-    byte[] readAllBytesOrExit(Path path) {
+    public byte[] readAllBytesOrExit(Path path) {
         try {
             return Files.readAllBytes(path);
         } catch (IOException e) {
@@ -27,7 +29,7 @@ public class Utils {
         return null;
     }
 
-    List<String> readAllLinesOrExit(Path path) {
+    public List<String> readAllLinesOrExit(Path path) {
         try {
             return Files.readAllLines(path, StandardCharsets.UTF_8);
         } catch (IOException e) {
@@ -37,7 +39,7 @@ public class Utils {
         return null;
     }
 
-    int bestMatch(float[] probabilities) {
+    public int bestMatch(float[] probabilities) {
         int best = 0;
         for (int i = 1; i < probabilities.length; ++i) {
             if (probabilities[i] > probabilities[best]) {
@@ -47,7 +49,7 @@ public class Utils {
         return best;
     }
 
-    File[] GetImageFromDir(String path) {
+    public File[] GetImageFromDir(String path) {
         File dir = new File(path);
         String[] EXTENSIONS = new String[]{
                 "gif", "png", "jpg", "jpeg"
@@ -66,7 +68,7 @@ public class Utils {
         return dir.listFiles(IMAGE_FILTER);
     }
 
-    static void copyFile(String source, String name, String dest) throws IOException {
+    public static void copyFile(String source, String name, String dest) throws IOException {
         File copy = null;
         int i = source.lastIndexOf('.');
         String extension = null;
@@ -90,7 +92,7 @@ public class Utils {
             System.out.println("Error: " + e);
         }
     }
-    static byte[] iplImageToByteArray(IplImage img) throws IOException {
+    public static byte[] iplImageToByteArray(IplImage img) throws IOException {
         BufferedImage im = new Java2DFrameConverter().convert(new OpenCVFrameConverter.ToIplImage().convert(img));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] barr = null;

@@ -1,6 +1,7 @@
-import componentsFX.ButtonSelectDirectoryPath;
-import componentsFX.SliderAndLabel;
-import componentsFX.TextfieldAndLabel;
+package main;
+
+import utils.Utils;
+import componentsFX.*;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,14 +10,14 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import componentsFX.ImageViewer;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.bytedeco.javacv.FrameGrabber;
 
 
-public class HelloFX extends Application {
+public class SmartCam extends Application {
     double percentValue = 50.0;
     String descValue = "";
 
@@ -36,8 +37,8 @@ public class HelloFX extends Application {
 
         /* Buttons */
 
-        ButtonSelectDirectoryPath directoryToTest = new ButtonSelectDirectoryPath("Which ?", stage);
-        ButtonSelectDirectoryPath directoryToSave = new ButtonSelectDirectoryPath("Where ?", stage);
+        ButtonSelectDirectoryPath directoryToTest = new ButtonSelectDirectoryPath("Which image directory", stage);
+        ButtonSelectDirectoryPath directoryToSave = new ButtonSelectDirectoryPath("Where to save", stage);
         Button run = new Button("run");
         run.setOnAction(event ->
         {
