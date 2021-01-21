@@ -105,15 +105,14 @@ public class ClassifyWebcam extends VBox{
                 ArrayList<Object> result = ClassifyImage.getClassifyFromByteImage("src/inception5h/", param);
                 Date date = new Date();
                 Instant instant = date.toInstant();
-                ArrayList<Object> result = ClassifyImage.getClassifyFromByteImage("src/inception5h/", param);
                 resultLabel = (String) result.get(0);
                 resultPercent = (float) result.get(1);
                 cvSaveImage("src/inception5h/webcam/"+resultLabel+instant+".png",img);
                 String filter= (String) choiceBoxFilter.getValue();
-                if(filter!="aucun"){
+                if(filter != null&&!filter.equals("aucun")){
                 try {
 
-                    Filter.filter("src/inception5h/webcam/"+resultLabel+instant+".png",resultLabel+instant,"src/inception5h/webcam/",filter);
+                    Filter.filter("src/inception5h/webcam/"+resultLabel+instant+".png",instant+resultLabel,"src/inception5h/webcam/",filter);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
