@@ -1,5 +1,3 @@
-
-
 import componentsFX.ButtonSelectDirectoryPath;
 import componentsFX.SliderAndLabel;
 import componentsFX.TextfieldAndLabel;
@@ -8,37 +6,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-
-
 import componentsFX.ImageViewer;
-
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import componentsFX.ImageViewer;
-import componentsFX.SliderAndLabel;
-import componentsFX.TextfieldAndLabel;
-import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import org.bytedeco.javacv.FrameGrabber;
-
-
-import componentsFX.ImageViewer;
-
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class HelloFX extends Application {
@@ -46,7 +21,7 @@ public class HelloFX extends Application {
     String descValue = "";
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws FrameGrabber.Exception {
         ArrayList<Object> classifyResult = ClassifyImage.displayClassify("src/inception5h/", "src/inception5h/tensorPics/jack.jpg");
         ImageViewer viewer = new ImageViewer("src/inception5h/tensorPics/jack.jpg", String.format("BEST MATCH: %s (%.2f%% )%n",
                 classifyResult.get(0),
@@ -87,25 +62,18 @@ public class HelloFX extends Application {
             }
         });
 
-        Button submit = new Button("Valider");
-        submit.setOnAction(event -> {
-            percentValue = percent.getValue();
-            descValue = desc.getText();
-            System.out.println(percentValue);
-            System.out.println(descValue);
-        });
 
-        HBox buttonBox = new HBox(directoryToTest, directoryToSave, submit);
+
+        HBox buttonBox = new HBox(directoryToTest, directoryToSave, run);
         buttonBox.setSpacing(10);
         buttonBox.setAlignment(Pos.BOTTOM_CENTER);
 
         GridPane gridPane = new GridPane();
-        gridPane.add(viewer, 0,0,3,1);
-        gridPane.add(percent,0,1,1,1);
-        gridPane.add(desc,1,1,1,1);
-        gridPane.add(submit,2,1,1,1);
+        gridPane.add(viewer, 0, 0, 3, 1);
+        gridPane.add(percent, 0, 1, 1, 1);
+        gridPane.add(desc, 1, 1, 1, 1);
         gridPane.add(buttonBox, 2, 1, 1, 1);
-        gridPane.add(new ClassifyWebcam(),1,3,3,1);
+        gridPane.add(new ClassifyWebcam(), 1, 3, 3, 1);
         gridPane.setHgap(10);
 
 
@@ -116,7 +84,7 @@ public class HelloFX extends Application {
         viewer.setAlignment(Pos.CENTER);
         percent.setAlignment(Pos.CENTER);
         desc.setAlignment(Pos.CENTER);
-        submit.setAlignment(Pos.CENTER);
+        run.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(gridPane, 640, 480);
         stage.setScene(scene);
