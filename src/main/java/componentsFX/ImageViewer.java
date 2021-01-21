@@ -40,7 +40,4 @@ public class ImageViewer extends VBox {
         setAlignment(Pos.BASELINE_CENTER);
     }
 
-    public ImageViewer() {
-
-    }
 }
