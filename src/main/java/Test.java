@@ -1,3 +1,6 @@
+import componentsFX.ImageViewer;
+import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
 import org.bytedeco.javacv.*;
 import org.bytedeco.opencv.opencv_core.IplImage;
 
@@ -6,12 +9,11 @@ import java.util.TimerTask;
 
 import static org.bytedeco.opencv.global.opencv_core.cvFlip;
 
-public class Test implements Runnable {
+public class Test extends Image implements Runnable {
     final int INTERVAL = 10;///you may use interval
-    CanvasFrame canvas = new CanvasFrame("Web Cam");
 
     public Test() {
-        canvas.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        this=
     }
 
     public void run() {
@@ -37,6 +39,7 @@ public class Test implements Runnable {
                 System.out.println(resultPercent);
                 //the grabbed frame will be flipped, re-flip to make it right
                 cvFlip(img, img, 1);// l-r = 90_degrees_steps_anti_clockwise;
+                Utils.mat2Image(img);
                 canvas.showImage(converter.convert(img));
 
                 Thread.sleep(INTERVAL);
