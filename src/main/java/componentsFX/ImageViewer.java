@@ -28,12 +28,12 @@ public class ImageViewer extends VBox {
         Image image = new Image(input);
         this.imageView = new ImageView(image);
         this.imageView.setPreserveRatio(true);
-        this.imageView.setFitHeight(400);
-        this.imageView.setFitWidth(680);
+        this.imageView.setFitHeight(380);
+        this.imageView.setFitWidth(700);
 
         this.label = new Label(labelString);
 
-        this.label.setStyle("-fx-font-weight: bold");
+        this.label.setStyle("-fx-font-size: 20px; -fx-font-weight: bold");
 
         this.getChildren().add(imageView);
         this.getChildren().add(label);

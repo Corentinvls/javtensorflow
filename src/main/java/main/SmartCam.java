@@ -1,5 +1,7 @@
 package main;
 
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import utils.Utils;
 import componentsFX.*;
 import javafx.application.Application;
@@ -24,23 +26,37 @@ public class SmartCam extends Application {
 
     @Override
     public void start(Stage stage) throws FrameGrabber.Exception {
+
+        // Tabs declaration
+        TabPane tabPane = new TabPane();
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        Tab tabImage = new Tab("Image");
+        Tab tabCamera = new Tab("Camera");
+        Tab tabFilters = new Tab("Filters");
+        tabPane.getTabs().add(tabImage);
+        tabPane.getTabs().add(tabCamera);
+        tabPane.getTabs().add(tabFilters);
+
+        // Results of image classification
         ArrayList<Object> classifyResult = ClassifyImage.displayClassify("src/inception5h/", "src/inception5h/tensorPics/jack.jpg");
-        ImageViewer viewer = new ImageViewer("src/inception5h/tensorPics/jack.jpg", String.format("BEST MATCH: %s (%.2f%% )%n",
+
+        // Display of image with classification
+        ImageViewer viewer = new ImageViewer("src/inception5h/tensorPics/jack.jpg", String.format("BEST MATCH: %s (%.2f%%)%n",
                 classifyResult.get(0),
                 classifyResult.get(1)));
-
-        GridPane.setFillWidth(viewer, true);
         viewer.setMaxWidth(Double.MAX_VALUE);
 
+        // slider for percent
         SliderAndLabel percent = new SliderAndLabel(0.0, 100.0, percentValue, "Pourcentage");
 
+        // text input for description
         TextfieldAndLabel desc = new TextfieldAndLabel("Votre description :");
 
         /* Buttons */
 
-        ButtonSelectDirectoryPath directoryToTest = new ButtonSelectDirectoryPath("Which image directory", stage);
-        ButtonSelectDirectoryPath directoryToSave = new ButtonSelectDirectoryPath("Where to save", stage);
-        Button run = new Button("run");
+        ButtonSelectDirectoryPath directoryToTest = new ButtonSelectDirectoryPath("Image dir.", stage);
+        ButtonSelectDirectoryPath directoryToSave = new ButtonSelectDirectoryPath("Save dir.", stage);
+        Button run = new Button("Run");
         run.setOnAction(event ->
         {
             percentValue = percent.getValue();
@@ -64,30 +80,36 @@ public class SmartCam extends Application {
             }
         });
 
-
+        // box for buttons
         HBox buttonBox = new HBox(directoryToTest, directoryToSave, run);
         buttonBox.setSpacing(10);
         buttonBox.setAlignment(Pos.BOTTOM_CENTER);
 
-        GridPane gridPane = new GridPane();
-        gridPane.add(viewer, 0, 0, 3, 1);
-        gridPane.add(percent, 0, 1, 1, 1);
-        gridPane.add(desc, 1, 1, 1, 1);
-        gridPane.add(buttonBox, 2, 1, 1, 1);
-        gridPane.add(new ClassifyWebcam(), 1, 3, 3, 1);
-        gridPane.setHgap(10);
-
-
-        ColumnConstraints col3 = new ColumnConstraints();
-        col3.setPercentWidth(100);
-        gridPane.getColumnConstraints().addAll(col3, col3, col3);
+        /* Image Pane */
+        GridPane gridImage = new GridPane();
+        gridImage.add(viewer, 0, 0, 3, 1);
+        gridImage.add(percent, 0, 1, 1, 1);
+        gridImage.add(desc, 1, 1, 1, 1);
+        gridImage.add(buttonBox, 2, 1, 1, 1);
+        gridImage.setHgap(10);
+        tabImage.setContent(gridImage);
 
         viewer.setAlignment(Pos.CENTER);
         percent.setAlignment(Pos.CENTER);
         desc.setAlignment(Pos.CENTER);
         run.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(gridPane, 640, 480);
+        ColumnConstraints col3 = new ColumnConstraints();
+        col3.setPercentWidth(100);
+        gridImage.getColumnConstraints().addAll(col3, col3, col3);
+
+        /* Camera Pane */
+        GridPane gridCamera = new GridPane();
+        gridCamera.add(new ClassifyWebcam(), 1, 3, 3, 1);
+        tabCamera.setContent(gridCamera);
+
+        /* Scene declaration for window */
+        Scene scene = new Scene(tabPane, 700, 520);
         stage.setScene(scene);
         stage.show();
     }

@@ -33,7 +33,7 @@ public class ClassifyWebcam extends VBox {
         ImageView imageView = new ImageView();
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(400);
-        imageView.setFitWidth(680);
+        imageView.setFitWidth(700);
         Label label = new Label("");
 
 
@@ -61,7 +61,7 @@ public class ClassifyWebcam extends VBox {
         });
 
 
-        label.setStyle("-fx-font-weight: bold");
+        label.setStyle("-fx-font-size: 20px; -fx-font-weight: bold");
         this.getChildren().add(imageView);
         this.getChildren().add(label);
         this.setAlignment(Pos.BASELINE_CENTER);
