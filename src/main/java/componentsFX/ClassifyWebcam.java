@@ -30,13 +30,19 @@ import java.util.concurrent.Executors;
 
 import static org.bytedeco.opencv.helper.opencv_imgcodecs.cvSaveImage;
 
-
+/**
+ * Webcam javaFX component with classify label and controls
+ */
 public class ClassifyWebcam extends VBox {
 
     private String labels[] = {"None", "Red", "Green", "Blue", "Black and White", "Sepia"};
     private String labelsFrame[] = {"Golden", "Brush"};
 
-
+    /**
+     * constructor Webcam javaFX component with classify label and controls
+     * @param stage
+     * @throws FrameGrabber.Exception
+     */
     public ClassifyWebcam(Stage stage) throws FrameGrabber.Exception {
         //FILTRE INPUTS
         CheckBox checkBoxFilter = new CheckBox();

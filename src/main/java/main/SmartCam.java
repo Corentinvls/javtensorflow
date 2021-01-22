@@ -214,7 +214,7 @@ public class SmartCam extends Application {
         tabCamera.setContent(gridCamera);
 
         /* Scene declaration for window */
-        Scene scene = new Scene(tabPane, 760, 550);
+        Scene scene = new Scene(tabPane, 780, 570);
         stage.setScene(scene);
         stage.show();
     }
