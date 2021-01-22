@@ -136,7 +136,7 @@ public class SmartCam extends Application {
 
         /* Camera Pane */
         GridPane gridCamera = new GridPane();
-        ClassifyWebcam webcamFeed = new ClassifyWebcam();
+        ClassifyWebcam webcamFeed = new ClassifyWebcam(stage);
         gridCamera.add(webcamFeed, 0, 0, 1, 1);
 
         webcamFeed.setAlignment(Pos.CENTER);

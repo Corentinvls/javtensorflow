@@ -39,4 +39,11 @@ public class Test {
     }
 
 
+    public static BufferedImage applyImage(BufferedImage imageToModify, String pathImageToAplly, int posX, int posY, int height, int width) throws IOException {
+        BufferedImage getImage2 = ImageIO.read(new File(pathImageToAplly));
+        Graphics graphics = imageToModify.getGraphics();
+        graphics.drawImage(getImage2, posX, posY, width, height, null);
+
+        return imageToModify;
+    }
 }
