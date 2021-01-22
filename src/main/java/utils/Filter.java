@@ -1,6 +1,7 @@
 package utils;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -105,6 +106,41 @@ public class Filter {
         }
         return img;
     }
+    /**
+     * Apply a frame on buffered image if name done register it on src/inception5h/framed/
+     * @param imageToModify
+     * @param pathImageToAplly
+     * @param name
+     * @return
+     * @throws IOException
+     */
+    public static BufferedImage applyFrame(BufferedImage imageToModify, String pathImageToAplly, String name) throws IOException {
+        BufferedImage getImage2 = ImageIO.read(new File(pathImageToAplly));
+        Graphics graphics = imageToModify.getGraphics();
 
+        graphics.drawImage(getImage2, 0, 0, imageToModify.getWidth(), imageToModify.getHeight(), null);
+        if (name != null && !name.equals(""))
+            ImageIO.write(imageToModify, "png", new File("src/inception5h/framed/" + name + ".png"));
+        return imageToModify;
+    }
+
+    /**
+     * past an image on another at selected pos and size
+     * @param imageToModify
+     * @param pathImageToAplly
+     * @param posX
+     * @param posY
+     * @param height
+     * @param width
+     * @return
+     * @throws IOException
+     */
+    public static BufferedImage applyImage(BufferedImage imageToModify, String pathImageToAplly, int posX, int posY, int height, int width) throws IOException {
+        BufferedImage getImage2 = ImageIO.read(new File(pathImageToAplly));
+        Graphics graphics = imageToModify.getGraphics();
+        graphics.drawImage(getImage2, posX, posY, width, height, null);
+
+        return imageToModify;
+    }
 
 }

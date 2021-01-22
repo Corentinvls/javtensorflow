@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 
 import javafx.stage.Stage;
 import main.ClassifyImage;
-import main.ModifyImage;
+
 import org.bytedeco.javacv.*;
 import org.bytedeco.opencv.opencv_core.IplImage;
 import utils.Converters;
@@ -38,21 +38,21 @@ public class ClassifyWebcam extends VBox {
 
 
     public ClassifyWebcam(Stage stage) throws FrameGrabber.Exception {
-        //FILTERS
+        //FILTRE INPUTS
         CheckBox checkBoxFilter = new CheckBox();
         ChoiceBoxCustom choiceBoxFilter = new ChoiceBoxCustom(labels);
         FlowPane flowPaneFilter = new FlowPane();
         flowPaneFilter.getChildren().add(checkBoxFilter);
         flowPaneFilter.getChildren().add(choiceBoxFilter);
 
-        //FRAMES
+        //CADRES INPUTS
         CheckBox checkBoxFrame = new CheckBox();
         ChoiceBoxCustom choiceBoxFrame = new ChoiceBoxCustom(labelsFrame);
         FlowPane flowPaneFrame = new FlowPane();
         flowPaneFrame.getChildren().add(checkBoxFrame);
         flowPaneFrame.getChildren().add(choiceBoxFrame);
 
-        //IMAGE
+        //IMAGE INPUTS
         CheckBox checkBoxImageToPaste = new CheckBox();
         ButtonSelectFilePath buttonSelectImage = new ButtonSelectFilePath("Choose image", stage);
         Spinner<Integer> spinnerX = new Spinner<Integer>(0, 10000, 0);
@@ -64,9 +64,11 @@ public class ClassifyWebcam extends VBox {
         FlowPane flowPaneImage = new FlowPane();
         flowPaneImage.getChildren().addAll(checkBoxImageToPaste, buttonSelectImage, spinnerX, spinnerY, spinnerH, spinnerW);
 
+        //INIT WEBCAM
         OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(0);
         OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
         grabber.start();
+        //INIT WEBCAM
         ImageView imageView = new ImageView();
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(400);
@@ -93,11 +95,11 @@ public class ClassifyWebcam extends VBox {
                         img = Converters.convertBuffToIplImage(imgBuff);
                     }
                     if (choiceBoxFrame.getValue() != null && checkBoxFrame.isSelected()) {
-                        imgBuff = ModifyImage.applyFrame(Converters.convertIplImageToBuffImage(img), "src/frame/" + choiceBoxFrame.getValue() + ".png", null);
+                        imgBuff = Filter.applyFrame(Converters.convertIplImageToBuffImage(img), "src/frame/" + choiceBoxFrame.getValue() + ".png", null);
                         img = Converters.convertBuffToIplImage(imgBuff);
                     }
                     if (buttonSelectImage.getPath() != null && !buttonSelectImage.getPath().equals("src") && checkBoxImageToPaste.isSelected()) {
-                        imgBuff = ModifyImage.applyImage(Converters.convertIplImageToBuffImage(img),
+                        imgBuff = Filter.applyImage(Converters.convertIplImageToBuffImage(img),
                                 buttonSelectImage.getPath(),
                                 spinnerX.getValue(), spinnerY.getValue(),
                                 spinnerH.getValue(), spinnerW.getValue());
@@ -131,7 +133,9 @@ public class ClassifyWebcam extends VBox {
 
     }
 
-
+    /**
+     * TimerTask class
+     */
     public static class ScheduledClassify extends TimerTask {
         private IplImage img;
         byte[] param;
@@ -146,6 +150,9 @@ public class ClassifyWebcam extends VBox {
 
         }
 
+        /**
+         * save image in webcam folder and excute classify
+         */
         @Override
         public void run() {
             if (param != null) {
@@ -159,18 +166,32 @@ public class ClassifyWebcam extends VBox {
             }
         }
 
+        /**
+         * get percent of classify
+         * @return float
+         */
         public float getResultPercent() {
             return resultPercent;
         }
-
+        /**
+         * get label of classify
+         * @return string
+         */
         public String getResultLabel() {
             return resultLabel;
         }
-
+        /**
+         * set byte array for classify
+         * @return string
+         */
         public void setParam(byte[] param) {
             this.param = param;
         }
 
+        /**
+         * set iplimage to save
+         * @param img
+         */
         public void setImg(IplImage img) {
             this.img = img;
         }

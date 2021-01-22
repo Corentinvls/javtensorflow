@@ -16,7 +16,6 @@ public class ClassifyImage {
 
     /**
      * Function to display the result of an image classifaction in the terminal
-     *
      * @param args
      * @throws Exception
      */
@@ -32,8 +31,7 @@ public class ClassifyImage {
     }
 
     /**
-     * Function to return an array containing the image classification, percentage, and image file
-     *
+     * Function to return an array containing the image classification, percentage, and image file path
      * @param modelDir
      * @param imageFile
      * @return
@@ -71,7 +69,7 @@ public class ClassifyImage {
     }
 
     /**
-     * Uses a Tensor to get the classification for an Image path
+     * get the classification for an Image path return an array containing the image classification, percentage, and image file path
      * @param modelDir
      * @param imageFile
      * @return
@@ -85,7 +83,7 @@ public class ClassifyImage {
     }
 
     /**
-     * Uses a Tensor to get the classification for an Imagebytes
+     * get the classification for an Imagebytes return an array containing the image classification, percentage
      * @param modelDir
      * @param imageBytes
      * @return
@@ -106,8 +104,7 @@ public class ClassifyImage {
     }
 
     /**
-     * Function to run the Image Classification
-     *
+     * Function to run the Image Classification return an array of probabilities
      * @param graphDef
      * @param image
      * @return
@@ -133,9 +130,7 @@ public class ClassifyImage {
 
     /**
      * create a Tensor from an image
-     * <p>
      * Scale and normalize an image (to 224x224), and convert to a tensor
-     *
      * @param imageBytes
      * @return
      */
