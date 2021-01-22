@@ -38,19 +38,21 @@ public class ClassifyWebcam extends VBox {
 
 
     public ClassifyWebcam(Stage stage) throws FrameGrabber.Exception {
-//FILTRE
+        //FILTERS
         CheckBox checkBoxFilter = new CheckBox();
         ChoiceBoxCustom choiceBoxFilter = new ChoiceBoxCustom(labels);
         FlowPane flowPaneFilter = new FlowPane();
         flowPaneFilter.getChildren().add(checkBoxFilter);
         flowPaneFilter.getChildren().add(choiceBoxFilter);
-//CADRES
+
+        //FRAMES
         CheckBox checkBoxFrame = new CheckBox();
         ChoiceBoxCustom choiceBoxFrame = new ChoiceBoxCustom(labelsFrame);
         FlowPane flowPaneFrame = new FlowPane();
         flowPaneFrame.getChildren().add(checkBoxFrame);
         flowPaneFrame.getChildren().add(choiceBoxFrame);
-//IMAGE
+
+        //IMAGE
         CheckBox checkBoxImageToPaste = new CheckBox();
         ButtonSelectFilePath buttonSelectImage = new ButtonSelectFilePath("Choose image", stage);
         Spinner<Integer> spinnerX = new Spinner<Integer>(0, 10000, 0);

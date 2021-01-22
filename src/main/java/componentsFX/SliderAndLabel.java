@@ -15,6 +15,14 @@ public class SliderAndLabel extends VBox {
     private final Slider slider;
     private final Tooltip tooltip;
 
+    /**
+     * Slider with a label
+     *
+     * @param min
+     * @param max
+     * @param value
+     * @param labelString
+     */
     public SliderAndLabel(Double min, Double max, Double value, String labelString) {
 
         this.label = new Label(labelString);

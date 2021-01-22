@@ -12,6 +12,13 @@ public class ButtonSelectDirectoryPath extends Button {
     private String path;
     private final DirectoryChooser directoryChooser;
 
+    /**
+     * Button that opens a DirectoryChooser
+     *
+     * @param label
+     * @param path
+     * @param stage
+     */
     public ButtonSelectDirectoryPath(String label, String path, Stage stage) {
         this.path = path;
         this.directoryChooser = new DirectoryChooser();
@@ -26,9 +33,7 @@ public class ButtonSelectDirectoryPath extends Button {
 
     public ButtonSelectDirectoryPath(String label, Stage stage) {
         this(label, "src", stage);
-
     }
-
 
     public String getPath() {
         return path;

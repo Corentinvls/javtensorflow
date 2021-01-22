@@ -11,6 +11,13 @@ public class ButtonSelectFilePath extends Button {
     private String path;
     private final FileChooser fileChooser;
 
+    /**
+     * Button that opens a FileChooser
+     *
+     * @param label
+     * @param path
+     * @param stage
+     */
     public ButtonSelectFilePath(String label, String path, Stage stage) {
         this.path = path;
         this.fileChooser = new FileChooser();

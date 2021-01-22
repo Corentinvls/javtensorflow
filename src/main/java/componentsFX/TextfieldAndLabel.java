@@ -8,6 +8,13 @@ public class TextfieldAndLabel extends GridPane {
     private final Label label;
     private final TextField text;
 
+
+    /**
+     * TextField with a label
+     *
+     * @param labelString
+     * @param valueString
+     */
     public TextfieldAndLabel(String labelString, String valueString) {
         this.label = new Label(labelString);
         this.text = new TextField(valueString);
