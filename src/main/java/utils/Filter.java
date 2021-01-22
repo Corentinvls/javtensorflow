@@ -12,8 +12,11 @@ public class Filter {
 
 
     /**
+     * Applies a given filter to an image and outputs it with a label in the filename
      * @param imagePath
+     * @param label
      * @param pathOut
+     * @param filter
      * @throws Exception
      */
     public static void filter(String imagePath, String label, String pathOut, String filter) throws Exception {
@@ -29,7 +32,7 @@ public class Filter {
         }
 
         //get width and height
-        img=applyColor(img, filter);
+        img = applyColor(img, filter);
 
         //write image
         try {
@@ -40,7 +43,13 @@ public class Filter {
         }
     }
 
-    public static BufferedImage applyColor( BufferedImage img,String filter) {
+    /**
+     * Applies a filter to an image and returns it
+     * @param img
+     * @param filter
+     * @return
+     */
+    public static BufferedImage applyColor(BufferedImage img, String filter) {
         int width = img.getWidth();
         int height = img.getHeight();
 
