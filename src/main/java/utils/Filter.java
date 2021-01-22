@@ -1,16 +1,5 @@
 package utils;
 
-import static org.bytedeco.opencv.global.opencv_imgproc.*;
-import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
-
-import javafx.scene.effect.ColorAdjust;
-import org.bytedeco.opencv.global.opencv_imgproc;
-import org.bytedeco.opencv.opencv_core.Mat;
-import org.bytedeco.opencv.opencv_core.Point;
-import org.bytedeco.opencv.opencv_core.Scalar;
-import org.bytedeco.opencv.opencv_core.Size;
-import org.opencv.imgproc.Imgproc;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -40,6 +29,18 @@ public class Filter {
         }
 
         //get width and height
+        img=applyColor(img, filter);
+
+        //write image
+        try {
+            f = new File(pathOut + "/" + label + "." + Utils.getExtension(imagePath));
+            ImageIO.write(img, Utils.getExtension(imagePath), f);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    public static BufferedImage applyColor( BufferedImage img,String filter) {
         int width = img.getWidth();
         int height = img.getHeight();
 
@@ -93,14 +94,8 @@ public class Filter {
                 img.setRGB(x, y, p);
             }
         }
-
-        //write image
-        try {
-            f = new File(pathOut + "/" + label + "." + Utils.getExtension(imagePath));
-            ImageIO.write(img, Utils.getExtension(imagePath), f);
-        } catch (IOException e) {
-            System.out.println(e);
-        }
+        return img;
     }
+
 
 }

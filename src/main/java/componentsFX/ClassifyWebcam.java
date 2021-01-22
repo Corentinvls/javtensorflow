@@ -13,9 +13,10 @@ import javafx.scene.layout.VBox;
 
 import javafx.stage.Stage;
 import main.ClassifyImage;
-import main.Test;
+import main.ModifyImage;
 import org.bytedeco.javacv.*;
 import org.bytedeco.opencv.opencv_core.IplImage;
+import utils.Converters;
 import utils.Filter;
 import utils.Utils;
 
@@ -32,7 +33,6 @@ import static org.bytedeco.opencv.helper.opencv_imgcodecs.cvSaveImage;
 
 public class ClassifyWebcam extends VBox {
 
-    Java2DFrameConverter java2DFrameConverter = new Java2DFrameConverter();
     private String labels[] = {"aucun", "vert", "rouge", "bleu", "noir et blanc", "sepia"};
     private String labelsFrame[] = {"Doré", "Trait"};
 
@@ -84,28 +84,31 @@ public class ClassifyWebcam extends VBox {
                 try {
                     frame = grabber.grabFrame();
                     img = converter.convert(frame);
-                    barr = Utils.iplImageToByteArray(img);
-                    System.out.println(buttonSelectImage.getPath());
+                    barr = Converters.iplImageToByteArray(img);
+
+                    if (choiceBoxFilter.getValue() != null && checkBoxFilter.isSelected()) {
+                        imgBuff =Filter.applyColor(Converters.convertIplImageToBuffImage(img), (String) choiceBoxFilter.getValue());
+                        img = Converters.convertBuffToIplImage(imgBuff);
+                    }
                     if (choiceBoxFrame.getValue() != null && checkBoxFrame.isSelected()) {
-                        imgBuff = Test.applyFrame(Utils.convertIplImageToBuffImage(img), "src/frame/" + choiceBoxFrame.getValue() + ".png", null);
-                        img = Utils.convertBuffToIplImage(imgBuff);
+                        imgBuff = ModifyImage.applyFrame(Converters.convertIplImageToBuffImage(img), "src/frame/" + choiceBoxFrame.getValue() + ".png", null);
+                        img = Converters.convertBuffToIplImage(imgBuff);
                     }
                     if(buttonSelectImage.getPath()!=null&& !buttonSelectImage.getPath().equals("src") && checkBoxImageToPaste.isSelected()){
-                       imgBuff = Test.applyImage(Utils.convertIplImageToBuffImage(img),
+                       imgBuff = ModifyImage.applyImage(Converters.convertIplImageToBuffImage(img),
                                buttonSelectImage.getPath(),
                                spinnerX.getValue(),spinnerY.getValue(),
                                spinnerH.getValue(),spinnerW.getValue());
-                        img = Utils.convertBuffToIplImage(imgBuff);
+                        img = Converters.convertBuffToIplImage(imgBuff);
                     }
 
-                        imgBuff = Utils.convertIplImageToBuffImage(img);
+                        imgBuff = Converters.convertIplImageToBuffImage(img);
 
 
 
 
                     scheduledTask.setParam(barr);
                     scheduledTask.setImg(img);
-                    scheduledTask.setChoiceBoxFilter(choiceBoxFilter);
                     Platform.runLater(() -> {
                         label.setText(String.format("BEST MATCH: %s %.2f%% likely%n", scheduledTask.getResultLabel(), scheduledTask.getResultPercent()));
                     });
@@ -132,7 +135,6 @@ public class ClassifyWebcam extends VBox {
 
 
     public static class ScheduledClassify extends TimerTask {
-        private ChoiceBoxCustom choiceBoxFilter;
         private IplImage img;
         byte[] param;
         private float resultPercent;
@@ -143,7 +145,7 @@ public class ClassifyWebcam extends VBox {
             this.resultLabel = "";
             this.resultPercent = 0.0f;
             this.img = img;
-            this.choiceBoxFilter = choiceBoxFilter;
+
         }
 
         @Override
@@ -156,14 +158,6 @@ public class ClassifyWebcam extends VBox {
                 resultPercent = (float) result.get(1);
                 cvSaveImage("src/inception5h/webcam/" + instant + resultLabel + ".png", img);
 
-                String filter = (String) choiceBoxFilter.getValue();
-                if (filter != null && !filter.equals("aucun")) {
-                    try {
-                        Filter.filter("src/inception5h/webcam/" + instant + resultLabel + ".png", instant + resultLabel, "src/inception5h/webcam/", filter);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         }
 
@@ -183,8 +177,5 @@ public class ClassifyWebcam extends VBox {
             this.img = img;
         }
 
-        public void setChoiceBoxFilter(ChoiceBoxCustom choiceBoxFilter) {
-            this.choiceBoxFilter = choiceBoxFilter;
-        }
     }
 } 

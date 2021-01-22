@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Test {
+public class ModifyImage {
     private static BufferedImage getFramedImage(BufferedImage imageToModify, String pathImageToAplly, String name) throws IOException {
         BufferedImage getImage2 = ImageIO.read(new File(pathImageToAplly));
         Graphics graphics = imageToModify.getGraphics();

@@ -99,39 +99,4 @@ public class Utils {
             System.out.println("Error: " + e);
         }
     }
-
-
-    public static byte[] iplImageToByteArray(IplImage img) throws IOException {
-        BufferedImage im = new Java2DFrameConverter().convert(new OpenCVFrameConverter.ToIplImage().convert(img));
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[] barr = null;
-        try {
-            ImageIO.write(im, "jpg", baos);
-            baos.flush();
-            barr = baos.toByteArray();
-        } finally {
-            baos.close();
-        }
-        return barr;
-    }
-
-    public static BufferedImage convertIplImageToBuffImage(IplImage src) {
-        OpenCVFrameConverter.ToIplImage grabberConverter = new OpenCVFrameConverter.ToIplImage();
-        Java2DFrameConverter paintConverter = new Java2DFrameConverter();
-        Frame frame = grabberConverter.convert(src);
-        return paintConverter.getBufferedImage(frame, 1);
-    }
-
-    public static IplImage convertBuffToIplImage(BufferedImage img) {
-        Java2DFrameConverter converter1 = new Java2DFrameConverter();
-        OpenCVFrameConverter.ToIplImage converter2 = new OpenCVFrameConverter.ToIplImage();
-        IplImage iploriginal = converter2.convert(converter1.convert(img));
-        return iploriginal.clone();
-    }
-
-    public static Frame IplImageToFrame(IplImage iplImage) {
-        OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
-        return converter.convert(iplImage);
-    }
-
 }
