@@ -12,6 +12,12 @@ import java.io.IOException;
 
 public class Converters {
 
+    /**
+     * Converts an iplImage to a ByteArray
+     * @param img
+     * @return
+     * @throws IOException
+     */
     public static byte[] iplImageToByteArray(IplImage img) throws IOException {
         BufferedImage im = new Java2DFrameConverter().convert(new OpenCVFrameConverter.ToIplImage().convert(img));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -26,6 +32,11 @@ public class Converters {
         return barr;
     }
 
+    /**
+     * Converts an iplImage to a BufferedImage
+     * @param src
+     * @return
+     */
     public static BufferedImage convertIplImageToBuffImage(IplImage src) {
         OpenCVFrameConverter.ToIplImage grabberConverter = new OpenCVFrameConverter.ToIplImage();
         Java2DFrameConverter paintConverter = new Java2DFrameConverter();
@@ -33,6 +44,11 @@ public class Converters {
         return paintConverter.getBufferedImage(frame, 1);
     }
 
+    /**
+     * Converts a BufferedImage to an IplImage
+     * @param img
+     * @return
+     */
     public static IplImage convertBuffToIplImage(BufferedImage img) {
         Java2DFrameConverter converter1 = new Java2DFrameConverter();
         OpenCVFrameConverter.ToIplImage converter2 = new OpenCVFrameConverter.ToIplImage();
@@ -40,6 +56,11 @@ public class Converters {
         return iploriginal.clone();
     }
 
+    /**
+     * Converts an iplImage to a Frame
+     * @param iplImage
+     * @return
+     */
     public static Frame IplImageToFrame(IplImage iplImage) {
         OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
         return converter.convert(iplImage);
