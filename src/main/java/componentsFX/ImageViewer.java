@@ -50,20 +50,14 @@ public class ImageViewer extends VBox {
 
     /**
      * Object to display an image with a string at the bottom, in bold
-     * @param imagePath
+     * @param image
      * @param labelString
      */
-    public ImageViewer(String imagePath, String labelString) {
+    public ImageViewer(BufferedImage image, String labelString) {
 
 
-        FileInputStream input = null;
-        try {
-            input = new FileInputStream(imagePath);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        Image image = new Image(input);
-        this.imageView = new ImageView(image);
+
+        this.imageView = new ImageView(SwingFXUtils.toFXImage(image, null));
         this.imageView.setPreserveRatio(true);
         this.imageView.setFitHeight(380);
         this.imageView.setFitWidth(700);

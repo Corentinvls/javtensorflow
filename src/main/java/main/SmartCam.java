@@ -4,6 +4,7 @@ package main;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import org.bytedeco.opencv.opencv_core.IplImage;
 import utils.Converters;
 import utils.Filter;
 import utils.Utils;
@@ -19,20 +20,24 @@ import javafx.stage.Stage;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.bytedeco.javacv.FrameGrabber;
 
 import javax.imageio.ImageIO;
 
+import static org.bytedeco.opencv.helper.opencv_imgcodecs.cvSaveImage;
+
 
 public class SmartCam extends Application {
     double percentValue = 50.0;
     String descValue = "";
-
+    BufferedImage imgBuff;
+String imgPath="src/inception5h/tensorPics/jack.jpg";
+String labels[] = {"None", "Red", "Green", "Blue", "Black and White", "Sepia"};
+    String labelsFrame[] = {"Golden", "Brush"};
     @Override
-    public void start(Stage stage) throws FrameGrabber.Exception {
+    public void start(Stage stage) throws IOException {
 
         // Tabs declaration
         TabPane tabPane = new TabPane();
@@ -41,18 +46,19 @@ public class SmartCam extends Application {
         Tab tabCamera = new Tab("Camera");
         tabPane.getTabs().add(tabImage);
         tabPane.getTabs().add(tabCamera);
+        imgBuff = ImageIO.read(new File(imgPath));
 
         // Results of image classification
-        ArrayList<Object> classifyResult = ClassifyImage.displayClassify("src/inception5h/", "src/inception5h/tensorPics/jack.jpg");
+        ArrayList<Object> classifyResult = ClassifyImage.displayClassify("src/inception5h/", imgPath);
+
 
         // Display of image with classification
-        ImageViewer viewer = new ImageViewer("src/inception5h/tensorPics/jack.jpg", String.format("Best match: %s (%.2f%%)%n",
+        ImageViewer viewer = new ImageViewer(imgBuff, String.format("Best match: %s (%.2f%%)%n",
                 classifyResult.get(0),
                 classifyResult.get(1)));
         viewer.setMaxWidth(Double.MAX_VALUE);
 
-        String labels[] = {"None", "Red", "Green", "Blue", "Black and White", "Sepia"};
-        String labelsFrame[] = {"Golden", "Brush"};
+
         CheckBox checkBoxFilter = new CheckBox();
         ChoiceBoxCustom choiceBoxFilter = new ChoiceBoxCustom(labels);
         FlowPane flowPaneFilter = new FlowPane();
@@ -76,8 +82,8 @@ public class SmartCam extends Application {
         spinnerX.setEditable(true);
         spinnerY.setEditable(true);
         FlowPane flowPaneImage = new FlowPane();
-        flowPaneImage.getChildren().addAll(checkBoxImageToPaste, buttonSelectImage, spinnerX, spinnerY, spinnerH, spinnerW);
 
+        flowPaneImage.getChildren().addAll(checkBoxImageToPaste, buttonSelectImage, spinnerX, spinnerY, spinnerH, spinnerW);
 
         // slider for percent
         SliderAndLabel percent = new SliderAndLabel(0.0, 100.0, percentValue, "Percentage");
@@ -87,49 +93,29 @@ public class SmartCam extends Application {
 
         /* Buttons */
 
-        ButtonSelectFilePath fileToOpen = new ButtonSelectFilePath("Open img.", stage);
+        ButtonSelectFilePath fileToOpen = new ButtonSelectFilePath("Open img.",imgPath, stage);
         ButtonSelectDirectoryPath directoryToTest = new ButtonSelectDirectoryPath("Image dir.", stage);
         ButtonSelectDirectoryPath directoryToSave = new ButtonSelectDirectoryPath("Save dir.", stage);
 
 
         Button runFilter = new Button("Run");
-        runFilter.setOnAction(event ->
-        {
-            percentValue = percent.getValue();
-            descValue = desc.getText();
-            List<ArrayList<Object>> results = ClassifyImage.ArrayClassify("src/inception5h/", directoryToTest.getPath());
 
-            for (ArrayList result : results) {
-                String[] labelFound = result.get(0).toString().split(" ");
-                if (((Float) result.get(1)) >= percentValue) {
-                    for (String labelWord : labelFound) {
-                        if (descValue.contains(labelWord) || descValue.equals("")) {
-                            try {
-                                Utils.copyFile(result.get(2).toString(), labelWord, directoryToSave.getPath());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            String filter = (String) choiceBoxFilter.getValue();
-                            if (filter != null && !filter.equals("aucun")) {
-                                try {
-                                    Filter.filter(directoryToSave.getPath() + "/" + labelWord + "." + Utils.getExtension(result.get(2).toString()), labelWord, directoryToSave.getPath(), filter);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        });
 
         Button updateImage = new Button("Update Image");
+        // box for filter buttons
+        ChoiceBoxCustom choiceBoxFilter2 = new ChoiceBoxCustom(labels);
+        HBox buttonFilterBox = new HBox(directoryToTest, directoryToSave, choiceBoxFilter2, runFilter);
+        buttonFilterBox.setSpacing(0);
+        buttonFilterBox.setAlignment(Pos.BOTTOM_CENTER);
+
+        // box for open buttons
+        HBox buttonFileBox = new HBox(fileToOpen, updateImage);
+        buttonFileBox.setSpacing(0);
+        buttonFileBox.setAlignment(Pos.BOTTOM_CENTER);
+
         updateImage.setOnAction(event ->
         {
-            if (fileToOpen.getPath() != null && !fileToOpen.getPath().equals("src")) {
-                BufferedImage imgBuff = null;
+            if (fileToOpen.getPath() != null) {
                 // Results of image classification
                 ArrayList<Object> tempResult = ClassifyImage.displayClassify("src/inception5h/", fileToOpen.getPath());
                 try {
@@ -145,7 +131,7 @@ public class SmartCam extends Application {
                     imgBuff = ModifyImage.applyFrame(imgBuff, "src/frame/" + choiceBoxFrame.getValue() + ".png", null);
 
                 }
-                if (buttonSelectImage.getPath() != null && !buttonSelectImage.getPath().equals("src") && checkBoxImageToPaste.isSelected()) {
+                if (buttonSelectImage.getPath() != null  && checkBoxImageToPaste.isSelected()) {
                     try {
                         imgBuff = ModifyImage.applyImage(imgBuff,
                                 buttonSelectImage.getPath(),
@@ -162,17 +148,37 @@ public class SmartCam extends Application {
                         tempResult.get(1)));
             }
         });
+        runFilter.setOnAction(event ->
+        {
+            percentValue = percent.getValue();
+            descValue = desc.getText();
+            List<ArrayList<Object>> results = ClassifyImage.ArrayClassify("src/inception5h/", directoryToTest.getPath());
 
-        // box for filter buttons
-        ChoiceBoxCustom choiceBoxFilter2 = new ChoiceBoxCustom(labels);
-        HBox buttonFilterBox = new HBox(directoryToTest, directoryToSave, choiceBoxFilter2, runFilter);
-        buttonFilterBox.setSpacing(0);
-        buttonFilterBox.setAlignment(Pos.BOTTOM_CENTER);
+            for (ArrayList result : results) {
+                String[] labelFound = result.get(0).toString().split(" ");
+                if (((Float) result.get(1)) >= percentValue) {
+                    for (String labelWord : labelFound) {
+                        if (descValue.contains(labelWord) || descValue.equals("")) {
+                            try {
+                                Utils.copyFile(result.get(2).toString(), labelWord, directoryToSave.getPath());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            String filter = (String) choiceBoxFilter2.getValue();
+                            if (filter != null && !filter.equals("aucun")) {
+                                try {
+                                    Filter.filter(directoryToSave.getPath() + "/" + labelWord + "." + Utils.getExtension(result.get(2).toString()), labelWord, directoryToSave.getPath(), filter);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
-        // box for open buttons
-        HBox buttonFileBox = new HBox(fileToOpen, updateImage);
-        buttonFileBox.setSpacing(0);
-        buttonFileBox.setAlignment(Pos.BOTTOM_CENTER);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        });
 
         /* Image Pane */
         GridPane gridImage = new GridPane();
