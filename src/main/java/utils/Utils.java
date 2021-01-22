@@ -20,6 +20,11 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class Utils {
+    /**
+     * Reads all bytes of a file and returns them
+     * @param path
+     * @return
+     */
     public byte[] readAllBytesOrExit(Path path) {
         try {
             return Files.readAllBytes(path);
@@ -30,6 +35,11 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Reads all lines of a file and returns them
+     * @param path
+     * @return
+     */
     public List<String> readAllLinesOrExit(Path path) {
         try {
             return Files.readAllLines(path, StandardCharsets.UTF_8);
@@ -40,6 +50,11 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Returns the highest value for a list of Floats
+     * @param probabilities
+     * @return
+     */
     public int bestMatch(float[] probabilities) {
         int best = 0;
         for (int i = 1; i < probabilities.length; ++i) {
@@ -50,6 +65,11 @@ public class Utils {
         return best;
     }
 
+    /**
+     * Returns a list of image files for a given directory
+     * @param path
+     * @return
+     */
     public File[] GetImageFromDir(String path) {
         File dir = new File(path);
         String[] EXTENSIONS = new String[]{
@@ -69,6 +89,11 @@ public class Utils {
         return dir.listFiles(IMAGE_FILTER);
     }
 
+    /**
+     * Gets the file extension for a given file path
+     * @param path
+     * @return
+     */
     public static String getExtension(String path) {
         int i = path.lastIndexOf('.');
 
@@ -78,6 +103,13 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Copies a file to a given directory with a specific name
+     * @param source
+     * @param name
+     * @param dest
+     * @throws IOException
+     */
     public static void copyFile(String source, String name, String dest) throws IOException {
         File copy = null;
 
