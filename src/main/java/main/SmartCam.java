@@ -89,7 +89,7 @@ public class SmartCam extends Application {
         TextfieldAndLabel desc = new TextfieldAndLabel("Your description:");
 
         /* Buttons */
-        ButtonSelectFilePath fileToOpen = new ButtonSelectFilePath("Open img.", imgPath, stage);
+        ButtonSelectFilePath fileToOpen = new ButtonSelectFilePath("Open img.", stage);
         ButtonSelectDirectoryPath directoryToTest = new ButtonSelectDirectoryPath("Image dir.", stage);
         ButtonSelectDirectoryPath directoryToSave = new ButtonSelectDirectoryPath("Save dir.", stage);
         Button runFilter = new Button("Run");

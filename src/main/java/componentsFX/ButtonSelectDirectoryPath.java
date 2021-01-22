@@ -14,7 +14,6 @@ public class ButtonSelectDirectoryPath extends Button {
 
     /**
      * Button that opens a DirectoryChooser
-     *
      * @param label
      * @param path
      * @param stage
