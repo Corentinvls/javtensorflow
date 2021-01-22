@@ -1,5 +1,6 @@
 package componentsFX;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -10,6 +11,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -41,6 +43,10 @@ public class ImageViewer extends VBox {
         this.imageView.setImage(image);
 
     }
+    public void setImageView(BufferedImage image) {
+        this.imageView.setImage(SwingFXUtils.toFXImage(image, null));
+
+    }
 
     /**
      * Object to display an image with a string at the bottom, in bold
@@ -48,6 +54,7 @@ public class ImageViewer extends VBox {
      * @param labelString
      */
     public ImageViewer(String imagePath, String labelString) {
+
 
         FileInputStream input = null;
         try {
