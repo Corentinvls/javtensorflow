@@ -51,20 +51,22 @@ public class SmartCam extends Application {
                 classifyResult.get(1)));
         viewer.setMaxWidth(Double.MAX_VALUE);
 
-         String labels[] = {"aucun", "vert", "rouge", "bleu", "noir et blanc", "sepia"};
-         String labelsFrame[] = {"Doré", "Trait"};
+        String labels[] = {"None", "Red", "Green", "Blue", "Black and White", "Sepia"};
+        String labelsFrame[] = {"Golden", "Brush"};
         CheckBox checkBoxFilter = new CheckBox();
         ChoiceBoxCustom choiceBoxFilter = new ChoiceBoxCustom(labels);
         FlowPane flowPaneFilter = new FlowPane();
         flowPaneFilter.getChildren().add(checkBoxFilter);
         flowPaneFilter.getChildren().add(choiceBoxFilter);
-//CADRES
+
+        // Borders
         CheckBox checkBoxFrame = new CheckBox();
         ChoiceBoxCustom choiceBoxFrame = new ChoiceBoxCustom(labelsFrame);
         FlowPane flowPaneFrame = new FlowPane();
         flowPaneFrame.getChildren().add(checkBoxFrame);
         flowPaneFrame.getChildren().add(choiceBoxFrame);
-//IMAGE
+
+        //IMAGE
         CheckBox checkBoxImageToPaste = new CheckBox();
         ButtonSelectFilePath buttonSelectImage = new ButtonSelectFilePath("Choose image", stage);
         Spinner<Integer> spinnerX = new Spinner<Integer>(0, 10000, 0);
@@ -174,7 +176,7 @@ public class SmartCam extends Application {
 
         /* Image Pane */
         GridPane gridImage = new GridPane();
-        GridPane gridControl=new GridPane();
+        GridPane gridControl = new GridPane();
 
         gridControl.add(flowPaneFilter, 0, 0, 1, 1);
         gridControl.add(flowPaneFrame, 0, 1, 1, 1);
@@ -182,7 +184,7 @@ public class SmartCam extends Application {
 
         gridImage.add(buttonFileBox, 0, 0, 3, 1);
         gridImage.add(viewer, 0, 1, 2, 1);
-        gridImage.add(gridControl,2,1,3,1);
+        gridImage.add(gridControl, 2, 1, 3, 1);
         gridImage.add(percent, 0, 2, 1, 1);
         gridImage.add(desc, 1, 2, 1, 1);
         gridImage.add(buttonFilterBox, 2, 2, 1, 1);

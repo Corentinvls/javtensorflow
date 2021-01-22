@@ -33,8 +33,8 @@ import static org.bytedeco.opencv.helper.opencv_imgcodecs.cvSaveImage;
 
 public class ClassifyWebcam extends VBox {
 
-    private String labels[] = {"aucun", "vert", "rouge", "bleu", "noir et blanc", "sepia"};
-    private String labelsFrame[] = {"Doré", "Trait"};
+    private String labels[] = {"None", "Red", "Green", "Blue", "Black and White", "Sepia"};
+    private String labelsFrame[] = {"Golden", "Brush"};
 
 
     public ClassifyWebcam(Stage stage) throws FrameGrabber.Exception {
