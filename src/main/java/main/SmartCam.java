@@ -1,11 +1,9 @@
 package main;
 
 
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
-import org.bytedeco.opencv.opencv_core.IplImage;
-import utils.Converters;
+
 import utils.Filter;
 import utils.Utils;
 import componentsFX.*;
@@ -21,21 +19,21 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-
-import org.bytedeco.javacv.FrameGrabber;
+import java.util.concurrent.Executors;
 
 import javax.imageio.ImageIO;
 
-import static org.bytedeco.opencv.helper.opencv_imgcodecs.cvSaveImage;
-
-
+/**
+ * Main class
+ */
 public class SmartCam extends Application {
     double percentValue = 50.0;
     String descValue = "";
     BufferedImage imgBuff;
-String imgPath="src/inception5h/tensorPics/jack.jpg";
-String labels[] = {"None", "Red", "Green", "Blue", "Black and White", "Sepia"};
+    String imgPath = "src/inception5h/tensorPics/jack.jpg";
+    String labels[] = {"None", "Red", "Green", "Blue", "Black and White", "Sepia"};
     String labelsFrame[] = {"Golden", "Brush"};
+
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -58,21 +56,21 @@ String labels[] = {"None", "Red", "Green", "Blue", "Black and White", "Sepia"};
                 classifyResult.get(1)));
         viewer.setMaxWidth(Double.MAX_VALUE);
 
-
+        //Color filter inputs
         CheckBox checkBoxFilter = new CheckBox();
         ChoiceBoxCustom choiceBoxFilter = new ChoiceBoxCustom(labels);
         FlowPane flowPaneFilter = new FlowPane();
         flowPaneFilter.getChildren().add(checkBoxFilter);
         flowPaneFilter.getChildren().add(choiceBoxFilter);
 
-        // Borders
+        // Borders inputs
         CheckBox checkBoxFrame = new CheckBox();
         ChoiceBoxCustom choiceBoxFrame = new ChoiceBoxCustom(labelsFrame);
         FlowPane flowPaneFrame = new FlowPane();
         flowPaneFrame.getChildren().add(checkBoxFrame);
         flowPaneFrame.getChildren().add(choiceBoxFrame);
 
-        //IMAGE
+        //Image past inputs
         CheckBox checkBoxImageToPaste = new CheckBox();
         ButtonSelectFilePath buttonSelectImage = new ButtonSelectFilePath("Choose image", stage);
         Spinner<Integer> spinnerX = new Spinner<Integer>(0, 10000, 0);
@@ -82,7 +80,6 @@ String labels[] = {"None", "Red", "Green", "Blue", "Black and White", "Sepia"};
         spinnerX.setEditable(true);
         spinnerY.setEditable(true);
         FlowPane flowPaneImage = new FlowPane();
-
         flowPaneImage.getChildren().addAll(checkBoxImageToPaste, buttonSelectImage, spinnerX, spinnerY, spinnerH, spinnerW);
 
         // slider for percent
@@ -92,16 +89,12 @@ String labels[] = {"None", "Red", "Green", "Blue", "Black and White", "Sepia"};
         TextfieldAndLabel desc = new TextfieldAndLabel("Your description:");
 
         /* Buttons */
-
-        ButtonSelectFilePath fileToOpen = new ButtonSelectFilePath("Open img.",imgPath, stage);
+        ButtonSelectFilePath fileToOpen = new ButtonSelectFilePath("Open img.", imgPath, stage);
         ButtonSelectDirectoryPath directoryToTest = new ButtonSelectDirectoryPath("Image dir.", stage);
         ButtonSelectDirectoryPath directoryToSave = new ButtonSelectDirectoryPath("Save dir.", stage);
-
-
         Button runFilter = new Button("Run");
-
-
         Button updateImage = new Button("Update Image");
+
         // box for filter buttons
         ChoiceBoxCustom choiceBoxFilter2 = new ChoiceBoxCustom(labels);
         HBox buttonFilterBox = new HBox(directoryToTest, directoryToSave, choiceBoxFilter2, runFilter);
@@ -128,12 +121,16 @@ String labels[] = {"None", "Red", "Green", "Blue", "Black and White", "Sepia"};
 
                 }
                 if (choiceBoxFrame.getValue() != null && checkBoxFrame.isSelected()) {
-                    imgBuff = ModifyImage.applyFrame(imgBuff, "src/frame/" + choiceBoxFrame.getValue() + ".png", null);
+                    try {
+                        imgBuff = Filter.applyFrame(imgBuff, "src/frame/" + choiceBoxFrame.getValue() + ".png", null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                 }
-                if (buttonSelectImage.getPath() != null  && checkBoxImageToPaste.isSelected()) {
+                if (buttonSelectImage.getPath() != null && checkBoxImageToPaste.isSelected()) {
                     try {
-                        imgBuff = ModifyImage.applyImage(imgBuff,
+                        imgBuff = Filter.applyImage(imgBuff,
                                 buttonSelectImage.getPath(),
                                 spinnerX.getValue(), spinnerY.getValue(),
                                 spinnerH.getValue(), spinnerW.getValue());
