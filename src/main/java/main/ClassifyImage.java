@@ -38,7 +38,7 @@ public class ClassifyImage {
         int bestLabelIdx = utils.bestMatch(labelProbabilities);
         String find = labels.get(bestLabelIdx);
         float percent = labelProbabilities[bestLabelIdx] * 100f;
-        System.out.printf("BEST MATCH: %s (%.2f%% likely)%n",
+        System.out.printf("Best match: %s (%.2f%% likely)%n",
                 find,
                 percent);
         ArrayList<Object> result = new ArrayList<>();

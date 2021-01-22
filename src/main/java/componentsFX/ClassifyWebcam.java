@@ -41,26 +41,26 @@ public class ClassifyWebcam extends VBox {
 //FILTRE
         CheckBox checkBoxFilter = new CheckBox();
         ChoiceBoxCustom choiceBoxFilter = new ChoiceBoxCustom(labels);
-        FlowPane flowPaneFilter=new FlowPane();
+        FlowPane flowPaneFilter = new FlowPane();
         flowPaneFilter.getChildren().add(checkBoxFilter);
         flowPaneFilter.getChildren().add(choiceBoxFilter);
 //CADRES
         CheckBox checkBoxFrame = new CheckBox();
         ChoiceBoxCustom choiceBoxFrame = new ChoiceBoxCustom(labelsFrame);
-        FlowPane flowPaneFrame=new FlowPane();
+        FlowPane flowPaneFrame = new FlowPane();
         flowPaneFrame.getChildren().add(checkBoxFrame);
         flowPaneFrame.getChildren().add(choiceBoxFrame);
 //IMAGE
         CheckBox checkBoxImageToPaste = new CheckBox();
-        ButtonSelectFilePath buttonSelectImage=new ButtonSelectFilePath("Choose image",stage);
+        ButtonSelectFilePath buttonSelectImage = new ButtonSelectFilePath("Choose image", stage);
         Spinner<Integer> spinnerX = new Spinner<Integer>(0, 10000, 0);
         Spinner<Integer> spinnerY = new Spinner<Integer>(0, 10000, 0);
         Spinner<Integer> spinnerH = new Spinner<Integer>(0, 10000, 50);
         Spinner<Integer> spinnerW = new Spinner<Integer>(0, 10000, 50);
         spinnerX.setEditable(true);
         spinnerY.setEditable(true);
-        FlowPane flowPaneImage=new FlowPane();
-        flowPaneImage.getChildren().addAll(checkBoxImageToPaste,buttonSelectImage,spinnerX,spinnerY,spinnerH,spinnerW);
+        FlowPane flowPaneImage = new FlowPane();
+        flowPaneImage.getChildren().addAll(checkBoxImageToPaste, buttonSelectImage, spinnerX, spinnerY, spinnerH, spinnerW);
 
         OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(0);
         OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
@@ -87,30 +87,28 @@ public class ClassifyWebcam extends VBox {
                     barr = Converters.iplImageToByteArray(img);
 
                     if (choiceBoxFilter.getValue() != null && checkBoxFilter.isSelected()) {
-                        imgBuff =Filter.applyColor(Converters.convertIplImageToBuffImage(img), (String) choiceBoxFilter.getValue());
+                        imgBuff = Filter.applyColor(Converters.convertIplImageToBuffImage(img), (String) choiceBoxFilter.getValue());
                         img = Converters.convertBuffToIplImage(imgBuff);
                     }
                     if (choiceBoxFrame.getValue() != null && checkBoxFrame.isSelected()) {
                         imgBuff = ModifyImage.applyFrame(Converters.convertIplImageToBuffImage(img), "src/frame/" + choiceBoxFrame.getValue() + ".png", null);
                         img = Converters.convertBuffToIplImage(imgBuff);
                     }
-                    if(buttonSelectImage.getPath()!=null&& !buttonSelectImage.getPath().equals("src") && checkBoxImageToPaste.isSelected()){
-                       imgBuff = ModifyImage.applyImage(Converters.convertIplImageToBuffImage(img),
-                               buttonSelectImage.getPath(),
-                               spinnerX.getValue(),spinnerY.getValue(),
-                               spinnerH.getValue(),spinnerW.getValue());
+                    if (buttonSelectImage.getPath() != null && !buttonSelectImage.getPath().equals("src") && checkBoxImageToPaste.isSelected()) {
+                        imgBuff = ModifyImage.applyImage(Converters.convertIplImageToBuffImage(img),
+                                buttonSelectImage.getPath(),
+                                spinnerX.getValue(), spinnerY.getValue(),
+                                spinnerH.getValue(), spinnerW.getValue());
                         img = Converters.convertBuffToIplImage(imgBuff);
                     }
 
-                        imgBuff = Converters.convertIplImageToBuffImage(img);
-
-
+                    imgBuff = Converters.convertIplImageToBuffImage(img);
 
 
                     scheduledTask.setParam(barr);
                     scheduledTask.setImg(img);
                     Platform.runLater(() -> {
-                        label.setText(String.format("BEST MATCH: %s %.2f%% likely%n", scheduledTask.getResultLabel(), scheduledTask.getResultPercent()));
+                        label.setText(String.format("Best match: %s %.2f%% likely%n", scheduledTask.getResultLabel(), scheduledTask.getResultPercent()));
                     });
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -127,8 +125,6 @@ public class ClassifyWebcam extends VBox {
         this.getChildren().add(flowPaneFilter);
         this.getChildren().add(flowPaneFrame);
         this.getChildren().add(flowPaneImage);
-
-
 
 
     }
