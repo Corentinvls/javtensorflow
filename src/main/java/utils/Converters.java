@@ -14,6 +14,7 @@ public class Converters {
 
     /**
      * Converts an iplImage to a ByteArray
+     *
      * @param img
      * @return
      * @throws IOException
@@ -34,6 +35,7 @@ public class Converters {
 
     /**
      * Converts an iplImage to a BufferedImage
+     *
      * @param src
      * @return
      */
@@ -46,6 +48,7 @@ public class Converters {
 
     /**
      * Converts a BufferedImage to an IplImage
+     *
      * @param img
      * @return
      */
@@ -55,13 +58,4 @@ public class Converters {
         IplImage iploriginal = converter2.convert(converter1.convert(img));
         return iploriginal.clone();
     }
-
-    /**
-     * Converts an iplImage to a Frame
-     * @param iplImage
-     * @return
-     */
-    public static Frame IplImageToFrame(IplImage iplImage) {
-        OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
-        return converter.convert(iplImage);
-    }}
+}

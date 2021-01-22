@@ -21,7 +21,7 @@ import java.util.List;
 
 public class Utils {
     /**
-     * Reads all bytes of a file and returns them
+     * Reads all bytes of a file and returns them as array of bytes
      * @param path
      * @return
      */
@@ -36,7 +36,7 @@ public class Utils {
     }
 
     /**
-     * Reads all lines of a file and returns them
+     * Reads all lines of a file and returns them as array of strings
      * @param path
      * @return
      */

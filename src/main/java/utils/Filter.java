@@ -12,7 +12,7 @@ public class Filter {
 
 
     /**
-     * Applies a given filter to an image and outputs it with a label in the filename
+     * Applies a given filter to an image File and save it with in the filename
      * @param imagePath
      * @param label
      * @param pathOut
@@ -44,7 +44,7 @@ public class Filter {
     }
 
     /**
-     * Applies a filter to an image and returns it
+     * Applies a filter to an BufferedImage image and returns it
      * @param img
      * @param filter
      * @return
